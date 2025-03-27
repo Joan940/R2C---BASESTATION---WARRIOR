@@ -1,0 +1,49 @@
+{
+    "strategi": {
+        "Attack": [
+            {
+                "jarak_enemy": 100,
+                "umpan": true,
+                "giring": false,
+                "hindari_lawan": true,
+                "target_robot": 1,
+                "hasil": "passing ke robot 1"
+            },
+            {
+                "jarak_enemy": 100,
+                "umpan": true,
+                "giring": false,
+                "hindari_lawan": true,
+                "target_robot": 2,
+                "hasil": "passing ke robot 2"
+            },
+            {
+                "jarak_enemy": 100,
+                "umpan": false,
+                "giring": true,
+                "hindari_lawan": false,
+                "hasil": "menggiring bola"
+            }
+        ],
+        "Defense": [
+            {
+                "ball_distance": 10,
+                "enemy1_value": "270",
+                "status_robot": 1,
+                "hasil": "bersiap menerima umpan"
+            },
+            {
+                "ball_distance": 7,
+                "enemy1_value": "180",
+                "status_robot": 0,
+                "hasil": "menutup ruang lawan"
+            },
+            {
+                "ball_distance": 5,
+                "enemy1_value": "90",
+                "status_robot": 0,
+                "hasil": "pressing lawan"
+            }
+        ]
+    }
+}

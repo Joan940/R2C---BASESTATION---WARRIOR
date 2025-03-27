@@ -1,0 +1,33 @@
+New BaseStation @ 192.168.1.170
+Connection from 192.168.1.170 accepted - Cyan
+1719253971590,04:35(00:00),Pre-Game,Z,Reset Game
+1719253971591,04:35(00:00),--,Z,Reset Game
+1719253973030,00:01(00:00),Pre-Game,S,STOP
+1719253973869,00:02(00:00),Pre-Game,K,CYAN Kickoff
+New BaseStation @ 192.168.1.170
+Connection from 192.168.1.170 accepted - Cyan
+1719253979469,00:07(00:00),Pre-Game,S,STOP
+1719253980708,00:09(00:00),Pre-Game,K,CYAN Kickoff
+1719253981109,00:09(00:00),Pre-Game,1,1st half
+1719253981110,00:09(00:00),1st Half,s,START
+1719253981591,00:00(00:00),1st Half - STOP,S,STOP
+1719254053312,01:12(00:00),1st Half - STOP,F,CYAN Freekick
+1719254083192,01:42(00:00),1st Half - STOP,S,STOP
+1719254211635,03:50(00:00),1st Half - STOP,F,CYAN Freekick
+Team WARRIOR dropped
+1719254249596,04:28(00:00),1st Half - STOP,S,STOP
+New BaseStation @ 192.168.1.170
+Connection from 192.168.1.170 accepted - Cyan
+1719254290876,05:09(00:00),1st Half - STOP,F,CYAN Freekick
+1719254362597,06:21(00:00),1st Half - STOP,S,STOP
+Team WARRIOR dropped
+New BaseStation @ 192.168.1.170
+Connection from 192.168.1.170 accepted - Cyan
+1719254673966,11:32(00:00),1st Half - STOP,F,CYAN Freekick
+Team WARRIOR dropped
+1719254737648,12:36(00:00),1st Half - STOP,S,STOP
+New BaseStation @ 192.168.1.170
+Connection from 192.168.1.170 accepted - Cyan
+1719255048535,17:47(00:00),1st Half - STOP,F,CYAN Freekick
+Team WARRIOR dropped
+1719255124535,19:03(00:00),1st Half - STOP,S,STOP
