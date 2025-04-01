@@ -84,7 +84,7 @@ varGlobals.CONFIG_BACK_GRID_X = '19'
 varGlobals.CONFIG_BACK_GRID_Y = '8'
 varGlobals.CONFIG_STRIKER_GRID_X = '13'
 varGlobals.CONFIG_STRIKER_GRID_Y = '8'
-
+varGlobals.CONFIG_DECISION_TREE = 'Tidak ada aksi yang cocok'
 
 varGlobals.cyan=True
 varGlobals.magenta=False
@@ -240,7 +240,7 @@ def button_action(text):
         data[0] = 255
         data[1] = 84
         send_robot(data)
-        # KickOffKiri()
+        KickOffKiri()
         if varGlobals.terimaData == False :
             for i in range(5):
                 data[0] = 255
@@ -256,7 +256,7 @@ def button_action(text):
         data[0] = 255
         data[1] = 84
         send_robot(data)
-        cornerKanan()
+        # cornerKanan()
         # varGlobals.CORNERKANAN = True
         if varGlobals.terimaData == False :
             for i in range(5):
@@ -271,10 +271,12 @@ def button_action(text):
     elif text =='mode 4':
         data = [1, 255, 20, 10, 10, 8, 160, 58, 0, 0, 45] 
         back(data)
+        Simulator()
 
     elif text == 'mode 5':
         data = [2, 255, 10, 5, 5, 5, 0, 90, 0, 0, 45] 
         striker(data)
+        Simulator()
 
     elif text == 'dummy 1':
         global index_A, index_B, index_C
@@ -627,6 +629,26 @@ def text_action(inp,input_key):
         print('invalid entry')
     mainMenu()
     
+def textDecisionTree(inp, input_key):
+    if inp == varGlobals.CONFIG_DECISION_TREE:
+        # while True: 
+        pygame.draw.rect(varGlobals.screen, 
+                         cc.WHITE, input_key[inp], 
+                         border_radius=20)
+        tts(varGlobals.screen,
+            varGlobals.CONFIG_DECISION_TREE,
+            input_key[inp].centerx,
+            input_key[inp].centery,
+            int(varGlobals.res[0]/115),
+            cc.BLACK)
+            
+        pygame.display.flip()
+        varGlobals.clock.tick(120)
+
+    else:
+        print('invalid entry')
+    Simulator()
+
 #############################################################################################
 #                              LOOPING DAN TAMPILAN UTAMA MENU                              #
 #############################################################################################
@@ -959,55 +981,6 @@ def robotConfiguration():
         pygame.display.flip()
 
 #############################################################################################
-#                                                                                           #
-#############################################################################################
-
-# font = pygame.font.SysFont(None, 24)
-
-# # Load data strategi
-# strategi_data = {
-#     "Attack": [
-#         {"jarak_enemy": 200, "hasil": "passing ke robot 1"},
-#         {"jarak_enemy": 200, "hasil": "passing ke robot 2"},
-#         {"jarak_enemy": 200, "hasil": "menggiring bola"},
-#     ],
-#     "Defense": [
-#         {"ball_distance": 10, "hasil": "bersiap menerima umpan"},
-#         {"ball_distance": 7, "hasil": "menutup ruang lawan"},
-#         {"ball_distance": 5, "hasil": "pressing lawan"}
-#     ]
-# }
-
-# def draw_tree(data, start_x, start_y, spacing_x, spacing_y):
-#     categories = list(data.keys())
-#     for i, category in enumerate(categories):
-#         cat_x = start_x
-#         cat_y = start_y + i * spacing_y
-#         draw_text(category, cat_x - 20, cat_y)
-        
-#         for j, item in enumerate(data[category]):
-#             node_x = start_x + spacing_x
-#             node_y = start_y + i * spacing_y + (j - 1) * 70
-
-#             if item["hasil"] == varGlobals.last_strategy:
-#                 pygame.draw.line(varGlobals.screen, cc.BLACK, (cat_x + 40, cat_y), (node_x - 110, node_y))
-
-#             draw_text(item["hasil"], node_x, node_y)
-
-# def draw_text(text, x, y):
-#     text_surface = font.render(text, True, cc.BLACK)
-#     text_rect = text_surface.get_rect(center=(x, y))
-#     varGlobals.screen.blit(text_surface, text_rect)
-
-# def UI():
-#     draw_tree(strategi_data, 200, 200, 300, 220)
-#     pygame.display.flip()
-
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-
-#############################################################################################
 #                              LOOPING DAN TAMPILAN SIMULATOR                               #
 #############################################################################################
 
@@ -1023,13 +996,15 @@ def Simulator():
     BUTTON_WIDTH = varGlobals.res[0] * 0.10
     BUTTON_HEIGHT = varGlobals.res[1] * 0.06
     TEXT_MSG_WIDTH = varGlobals.res[0] / 10
-    TEXT_MSG_HEIGHT = varGlobals.res[1] /25
+    TEXT_MSG_HEIGHT = varGlobals.res[1] / 25
     TEXT_ROBOT_WIDTH = varGlobals.res[0] / 10
-    TEXT_ROBOT_HEIGHT = varGlobals.res[1] /30
+    TEXT_ROBOT_HEIGHT = varGlobals.res[1] / 30
     INP_TEXT_WIDTH = varGlobals.res[0] / 20
-    INP_TEXT_HEIGHT = varGlobals.res[1] /50
+    INP_TEXT_HEIGHT = varGlobals.res[1] / 50
+    TEXT_DECISION_WIDTH = varGlobals.res[0] * 0.10
+    TEXT_DECISION_HEIGHT = varGlobals.res[1] * 0.06
     
-    # textbox config   
+    # textbox config  
     INP_CONFIG_BACK_GRID_X = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 5.9),
                             window_rect.centery - (INP_TEXT_HEIGHT * 1.1),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
@@ -1046,15 +1021,16 @@ def Simulator():
                             window_rect.centery - (INP_TEXT_HEIGHT * 4.4),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
     
+    INP_CONFIG_DECISION_TREE = pygame.rect.Rect(window_rect.centerx + (TEXT_DECISION_WIDTH * 2.85),
+                            window_rect.centery + TEXT_DECISION_HEIGHT * (-4.3),
+                            TEXT_DECISION_WIDTH/0.59, TEXT_DECISION_HEIGHT/2)
+    
 
-    input_key_back_grid_x = {varGlobals.CONFIG_BACK_GRID_X:INP_CONFIG_BACK_GRID_X
-                  }
-    input_key_back_grid_y = {varGlobals.CONFIG_BACK_GRID_Y:INP_CONFIG_BACK_GRID_Y
-                  }
-    input_key_striker_grid_x = {varGlobals.CONFIG_STRIKER_GRID_X:INP_CONFIG_STRIKER_GRID_X
-                  }
-    input_key_striker_grid_y = {varGlobals.CONFIG_STRIKER_GRID_Y:INP_CONFIG_STRIKER_GRID_Y
-                  }
+    input_key_back_grid_x = {varGlobals.CONFIG_BACK_GRID_X:INP_CONFIG_BACK_GRID_X}
+    input_key_back_grid_y = {varGlobals.CONFIG_BACK_GRID_Y:INP_CONFIG_BACK_GRID_Y}
+    input_key_striker_grid_x = {varGlobals.CONFIG_STRIKER_GRID_X:INP_CONFIG_STRIKER_GRID_X}
+    input_key_striker_grid_y = {varGlobals.CONFIG_STRIKER_GRID_Y:INP_CONFIG_STRIKER_GRID_Y}
+    input_key_decision_tree = {varGlobals.CONFIG_DECISION_TREE:INP_CONFIG_DECISION_TREE}
 
     # checkbox config
     checkbox_size = varGlobals.res[1] * 0.02
@@ -1205,8 +1181,6 @@ def Simulator():
     while varGlobals.runSim:
         
         playGame()
-
-        # UI()
 
         textsKiper = [
         "robot_id     : " + str(dataRobot.robot_id[0]),
@@ -1503,7 +1477,6 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
-        # DETEKSI JARAK MUSUH
         sudut1_rad = math.radians(dataRobot.enemy1[1])
         sudut2_rad = math.radians(dataRobot.enemy1[2])
 
@@ -1513,10 +1486,13 @@ def Simulator():
         c1 = dataRobot.ypos[1] - m1 * dataRobot.xpos[1]
         c2 = dataRobot.ypos[2] - m2 * dataRobot.xpos[2]
 
-        x_potong = (c2 - c1) / (m1 - m2)
-        y_potong = m1 * x_potong + c1
+        if m1 != m2:
+            x_potong = (c2 - c1) / (m1 - m2)
+            y_potong = m1 * x_potong + c1
 
-        jarak_robot_musuh = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong)
+            jarak_robot_musuh = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong)
+        else:
+            jarak_robot_musuh = None
 
         #####################################################################################################################################
         #####################################################################################################################################
@@ -1943,6 +1919,18 @@ def Simulator():
                     input_key_back_grid_y[text].centery,
                     int(varGlobals.res[0]/65),
                     cc.BLACK)
+                
+            for text in input_key_decision_tree:
+                pygame.draw.rect(varGlobals.screen, 
+                                cc.WHITE, input_key_decision_tree[text], 
+                                border_radius=20)
+
+                tts(varGlobals.screen,
+                    text,
+                    input_key_decision_tree[text].centerx,
+                    input_key_decision_tree[text].centery,
+                    int(varGlobals.res[0]/115),
+                    cc.BLACK)
 
         frame_striker.fill(cc.WHITE)
         frame_back.fill(cc.WHITE)
@@ -2107,10 +2095,11 @@ def Simulator():
 
         aksi = get_strategy(dataRobot.catch_ball[2])
         strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
+        varGlobals.CONFIG_DECISION_TREE = strategi
 
         # Cek perubahan strategi atau aksi
         if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
-            print(f"Strategi : {varGlobals.last_strategy}")
+            print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
             print(f"Aksi : {aksi}")
             print(f"Jarak : {jarak_robot_musuh}")
 

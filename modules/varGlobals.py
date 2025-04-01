@@ -128,6 +128,7 @@ index_A = 1
 index_B = 1
 index_C = 1
 
+CONFIG_DECISION_TREE = ''
 last_strategy = None
 last_action = None
 

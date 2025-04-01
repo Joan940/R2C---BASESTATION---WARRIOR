@@ -1,6 +1,4 @@
 import modules.varGlobals as varGlobals
-import time
-import threading
 from library.playGame import playGame 
 import modules.dataRobot as dataRobot
 from modules.comBasestation import send_robot
@@ -71,9 +69,8 @@ def KickOffKiri():
     # print("Sudah Di Posisi" if diPosisi else "Belum Di Posisi")
 
     if varGlobals.runKickoffKiri:
-        lihatBolaDiam(1)
-        kejarBolaPelan(2)
-        passing(2)
+        kejarBolaCepat(1)
+        kejarBolaCepat(2)
 
         # dribbling(1)
         # lihatBolaGeser(2)
