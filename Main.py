@@ -89,8 +89,6 @@ varGlobals.CONFIG_DECISION_TREE = 'Tidak ada aksi yang cocok'
 varGlobals.cyan=True
 varGlobals.magenta=False
 
-getBall = False
-runSIM = False
 #############################################################################################
 #############################################################################################
 
@@ -268,15 +266,29 @@ def button_action(text):
         send_robot(data)
         Simulator()
 
-    elif text =='mode 4':
-        data = [1, 255, 20, 10, 10, 8, 160, 58, 0, 0, 45] 
-        back(data)
+    elif text == 'mode 4':
+        varGlobals.updateDummy = False
+
+        data1 = [1, 255, 20, 10, 10, 8, 160, 58, 0, 0, 45]
+        back(data1)
+        data2 = [2, 255, 10, 5, 5, 5, 0, 90, 1, 0, 45]
+        striker(data2)
+
         Simulator()
 
+        varGlobals.updateDummy = True
+
     elif text == 'mode 5':
-        data = [2, 255, 10, 5, 5, 5, 0, 90, 0, 0, 45] 
-        striker(data)
+        varGlobals.updateDummy = False
+
+        data1 = [1, 255, 20, 10, 10, 8, 160, 58, 1, 0, 45]
+        back(data1)
+        data2 = [2, 255, 10, 5, 5, 5, 0, 90, 1, 0, 45]
+        striker(data2)
+
         Simulator()
+
+        varGlobals.updateDummy = True
 
     elif text == 'dummy 1':
         global index_A, index_B, index_C
@@ -628,26 +640,6 @@ def text_action(inp,input_key):
     else:
         print('invalid entry')
     mainMenu()
-    
-def textDecisionTree(inp, input_key):
-    if inp == varGlobals.CONFIG_DECISION_TREE:
-        # while True: 
-        pygame.draw.rect(varGlobals.screen, 
-                         cc.WHITE, input_key[inp], 
-                         border_radius=20)
-        tts(varGlobals.screen,
-            varGlobals.CONFIG_DECISION_TREE,
-            input_key[inp].centerx,
-            input_key[inp].centery,
-            int(varGlobals.res[0]/115),
-            cc.BLACK)
-            
-        pygame.display.flip()
-        varGlobals.clock.tick(120)
-
-    else:
-        print('invalid entry')
-    Simulator()
 
 #############################################################################################
 #                              LOOPING DAN TAMPILAN UTAMA MENU                              #
@@ -985,6 +977,8 @@ def robotConfiguration():
 #############################################################################################
 
 def Simulator():
+    global posisi_dummy1, posisi_dummy2, posisi_dummy3
+
     varGlobals.runMenu=False
     varGlobals.runConf=False
     varGlobals.runSim=True
@@ -1030,7 +1024,6 @@ def Simulator():
     input_key_back_grid_y = {varGlobals.CONFIG_BACK_GRID_Y:INP_CONFIG_BACK_GRID_Y}
     input_key_striker_grid_x = {varGlobals.CONFIG_STRIKER_GRID_X:INP_CONFIG_STRIKER_GRID_X}
     input_key_striker_grid_y = {varGlobals.CONFIG_STRIKER_GRID_Y:INP_CONFIG_STRIKER_GRID_Y}
-    input_key_decision_tree = {varGlobals.CONFIG_DECISION_TREE:INP_CONFIG_DECISION_TREE}
 
     # checkbox config
     checkbox_size = varGlobals.res[1] * 0.02
@@ -1170,9 +1163,10 @@ def Simulator():
     #####################################################################################################################################
 
     #MENGGAMBIL NILAI DUMMY
-    posisi_dummy1 = pindah_posisi_dummy1()
-    posisi_dummy2 = pindah_posisi_dummy2()
-    posisi_dummy3 = pindah_posisi_dummy3()
+    if varGlobals.updateDummy:
+        posisi_dummy1 = pindah_posisi_dummy1()
+        posisi_dummy2 = pindah_posisi_dummy2()
+        posisi_dummy3 = pindah_posisi_dummy3()
 
     #####################################################################################################################################
     #####################################################################################################################################
@@ -1477,6 +1471,7 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
+        # JARAK ROBOT MUSUH
         sudut1_rad = math.radians(dataRobot.enemy1[1])
         sudut2_rad = math.radians(dataRobot.enemy1[2])
 
@@ -1493,6 +1488,26 @@ def Simulator():
             jarak_robot_musuh = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong)
         else:
             jarak_robot_musuh = None
+
+        # DECISION TREE
+        json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
+        data = read_json(json_filename) 
+
+        aksi = get_strategy(dataRobot.catch_ball[2])
+        strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
+        varGlobals.CONFIG_DECISION_TREE = strategi
+
+        # Cek perubahan strategi atau aksi
+        if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
+            print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
+            print(f"Aksi : {aksi}")
+            print(f"Jarak : {jarak_robot_musuh}")
+
+            # Simpan strategi & aksi terakhir agar tidak nge-print terus
+            varGlobals.last_strategy = strategi
+            varGlobals.last_action = aksi
+
+        input_key_decision_tree = {varGlobals.CONFIG_DECISION_TREE:INP_CONFIG_DECISION_TREE}
 
         #####################################################################################################################################
         #####################################################################################################################################
@@ -1924,7 +1939,6 @@ def Simulator():
                 pygame.draw.rect(varGlobals.screen, 
                                 cc.WHITE, input_key_decision_tree[text], 
                                 border_radius=20)
-
                 tts(varGlobals.screen,
                     text,
                     input_key_decision_tree[text].centerx,
@@ -2089,23 +2103,23 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
-        # DECISION TREE
-        json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
-        data = read_json(json_filename) 
+        # # DECISION TREE
+        # json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
+        # data = read_json(json_filename) 
 
-        aksi = get_strategy(dataRobot.catch_ball[2])
-        strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
-        varGlobals.CONFIG_DECISION_TREE = strategi
+        # aksi = get_strategy(dataRobot.catch_ball[2])
+        # strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
+        # varGlobals.CONFIG_DECISION_TREE = strategi
 
-        # Cek perubahan strategi atau aksi
-        if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
-            print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
-            print(f"Aksi : {aksi}")
-            print(f"Jarak : {jarak_robot_musuh}")
+        # # Cek perubahan strategi atau aksi
+        # if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
+        #     print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
+        #     print(f"Aksi : {aksi}")
+        #     print(f"Jarak : {jarak_robot_musuh}")
 
-            # Simpan strategi & aksi terakhir agar tidak nge-print terus
-            varGlobals.last_strategy = strategi
-            varGlobals.last_action = aksi
+        #     # Simpan strategi & aksi terakhir agar tidak nge-print terus
+        #     varGlobals.last_strategy = strategi
+        #     varGlobals.last_action = aksi
 
 ###############################################################################################################################################################################################
 ###############################################################################################################################################################################################

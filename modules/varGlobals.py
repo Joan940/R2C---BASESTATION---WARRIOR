@@ -132,6 +132,7 @@ CONFIG_DECISION_TREE = ''
 last_strategy = None
 last_action = None
 
+updateDummy = True
 goalPosition = False
 
 lapanganResX= 1200

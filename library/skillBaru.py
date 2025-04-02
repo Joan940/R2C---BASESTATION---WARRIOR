@@ -48,25 +48,21 @@ def kejarBolaPelan(id):
     print("Kejar bola pelan")
     data = setData(id, 254, 1)
     kirimData(data)
-    time.sleep(0.25)
 
 def shoot(id):
     print("Tendang Gawang")
     data = setData(id, 254, 2)
     kirimData(data)
-    # time.sleep(0.25)
 
 def passing(id):
     data = setData(id, 254, 3)
     print("Passing")
     kirimData(data)
-    time.sleep(0.25)
 
 def lihatBolaDiam(id):
     print("Lihat bola diam")
     data = setData(id, 254, 4)
     kirimData(data)
-    time.sleep(0.25)
 
 def lihatBolaGeser(id):
     print("lihat bola geser")
@@ -90,7 +86,6 @@ def kejarBolaCepat(id):
         lihatBolaDiam(2)
     if id == 2:
         lihatBolaDiam(1)
-    # time.sleep(0.5)
 
 #################################
 #          Uji Coba Giring      #

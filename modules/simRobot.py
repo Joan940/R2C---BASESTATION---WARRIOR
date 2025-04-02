@@ -61,7 +61,7 @@ def back(data):
         send[6]=((data[5]*50)+25) & 0xFF
         send[7]=0
         send[8]=data[7]
-        send[9]=0
+        send[9]=data[8]
         send[10]=65
         send[11]=0
         send[12]=0
@@ -115,7 +115,7 @@ def striker(data):
         send[6]=((data[5]*50)+25) & 0xFF
         send[7]=data[8]
         send[8]=data[7]
-        send[9]=1
+        send[9]=data[8]
         send[10]=179
         send[11]=0
         send[12]=0
