@@ -2,7 +2,7 @@
     "strategi": {
         "Attack": [
             {
-                "jarak_enemy": 100,
+                "jarak_enemy2": 100,
                 "umpan": true,
                 "giring": false,
                 "hindari_lawan": true,
@@ -10,7 +10,7 @@
                 "hasil": "passing ke robot 1"
             },
             {
-                "jarak_enemy": 100,
+                "jarak_enemy1": 100,
                 "umpan": true,
                 "giring": false,
                 "hindari_lawan": true,
@@ -18,11 +18,20 @@
                 "hasil": "passing ke robot 2"
             },
             {
-                "jarak_enemy": 100,
+                "jarak_enemy1": 100,
                 "umpan": false,
                 "giring": true,
                 "hindari_lawan": false,
-                "hasil": "menggiring bola"
+                "target_robot": 1,
+                "hasil": "robot 1 menggiring bola"
+            },
+            {
+                "jarak_enemy2": 100,
+                "umpan": false,
+                "giring": true,
+                "hindari_lawan": false,
+                "target_robot": 2,
+                "hasil": "robot 2 menggiring bola"
             }
         ],
         "Defense": [

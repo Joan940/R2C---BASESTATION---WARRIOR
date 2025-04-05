@@ -48,16 +48,17 @@ udp=bool
 runMenu = bool
 runConf = bool
 runSim = bool
+
 CONNECT= ''
 BIND = ''
 conKiper = '' 
 conBack = '' 
 conStriker = '' 
-terimaData = False
+refbox=''
+
 kiper = bool
 back = bool
 striker = bool
-refbox=''
 newMsgRef=bool
 
 cyan=bool
@@ -134,6 +135,7 @@ last_action = None
 
 updateDummy = True
 goalPosition = False
+terimaData = False
 
 lapanganResX= 1200
 lapanganResY= 800
@@ -214,7 +216,7 @@ bgMenu = pygame.transform.scale(bgMenu, res)
 bgConf = pygame.image.load("/home/joan/Downloads/BASESTATION - R2C - WARRIOR (coba)/assets/bgConf.png").convert_alpha()
 bgConf = pygame.transform.scale(bgConf, res)
 
-bgSim = pygame.image.load("/home/joan/Downloads/BASESTATION - R2C - WARRIOR (coba)/assets/bgSim.png").convert_alpha()
+bgSim = pygame.image.load("/home/joan/Downloads/bgSim.png").convert_alpha()
 bgSim = pygame.transform.scale(bgSim, res)
 
 

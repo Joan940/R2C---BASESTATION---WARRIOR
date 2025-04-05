@@ -180,14 +180,14 @@ def gambar_grid():
     for xGrid in range(int(varGlobals.offsetX-varGlobals.offsetResetPosX), 
                        int(varGlobals.lapanganResX*varGlobals.skala)+int(varGlobals.offsetX+varGlobals.offsetResetPosX)+int(varGlobals.gridRes*varGlobals.skala), 
                        int(varGlobals.gridRes*varGlobals.skala)):
-        
+        # 
         pygame.draw.line(varGlobals.screen, 
                          cc.AXOLOTL, 
                          (xGrid, varGlobals.offsetY-varGlobals.offsetResetPosY), 
                          (xGrid, int(varGlobals.lapanganResY*varGlobals.skala)+int(varGlobals.offsetY+varGlobals.offsetResetPosY)))
-        
+        # 
         angka = (xGrid - (varGlobals.offsetX-varGlobals.offsetResetPosX)) // int(varGlobals.gridRes*varGlobals.skala)
-        
+        # 
         if(angka<=25):
             tts(varGlobals.screen, 
                 int(angka), 
@@ -199,12 +199,12 @@ def gambar_grid():
     for yGrid in range(int(varGlobals.offsetY-varGlobals.offsetResetPosY), 
                        int(varGlobals.lapanganResY*varGlobals.skala)+int(varGlobals.offsetY+varGlobals.offsetResetPosY)+int(varGlobals.gridRes*varGlobals.skala), 
                        int(varGlobals.gridRes*varGlobals.skala)):
-        
+        # 
         pygame.draw.line(varGlobals.screen, 
                          cc.AXOLOTL, 
                          (varGlobals.offsetX-varGlobals.offsetResetPosX, yGrid), 
                          (int(varGlobals.lapanganResX*varGlobals.skala)+int(varGlobals.offsetX+varGlobals.offsetResetPosX), yGrid))
-        
+        # 
         angka = (yGrid - (varGlobals.offsetY-varGlobals.offsetResetPosY)) // int(varGlobals.gridRes*varGlobals.skala)
         if(angka<=17):
             tts(varGlobals.screen, 

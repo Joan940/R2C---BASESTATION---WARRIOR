@@ -269,9 +269,9 @@ def button_action(text):
     elif text == 'mode 4':
         varGlobals.updateDummy = False
 
-        data1 = [1, 255, 20, 10, 10, 8, 160, 58, 0, 0, 45]
+        data1 = [1, 255, 20, 10, 10, 8, 160, 0, 59, 0, 110, 0, 0, 0, 0, 1]
         back(data1)
-        data2 = [2, 255, 10, 5, 5, 5, 0, 90, 1, 0, 45]
+        data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 1, 0, 0, 0, 0, 0, 0]
         striker(data2)
 
         Simulator()
@@ -281,31 +281,37 @@ def button_action(text):
     elif text == 'mode 5':
         varGlobals.updateDummy = False
 
-        data1 = [1, 255, 20, 10, 10, 8, 160, 58, 1, 0, 45]
+        data1 = [1, 255, 20, 10, 10, 8, 160, 0, 59, 0, 110, 0, 0, 0, 0, 1]
         back(data1)
-        data2 = [2, 255, 10, 5, 5, 5, 0, 90, 1, 0, 45]
+        data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 0, 35, 0, 0, 0, 0, 0]
         striker(data2)
 
         Simulator()
 
         varGlobals.updateDummy = True
 
-    elif text == 'dummy 1':
+    elif text == '1':
         global index_A, index_B, index_C
+        varGlobals.updateDummy = True
+
         pindah_posisi_dummy1()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
         varGlobals.index_C -= 1
         Simulator()
 
-    elif text == 'dummy 2':
+    elif text == '2':
+        varGlobals.updateDummy = True
+
         pindah_posisi_dummy2()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
         varGlobals.index_C -= 1
         Simulator()
 
-    elif text == 'dummy 3':
+    elif text == '3':
+        varGlobals.updateDummy = True
+        
         pindah_posisi_dummy3()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
@@ -1000,18 +1006,18 @@ def Simulator():
     
     # textbox config  
     INP_CONFIG_BACK_GRID_X = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 5.9),
-                            window_rect.centery - (INP_TEXT_HEIGHT * 1.1),
+                            window_rect.centery - (INP_TEXT_HEIGHT * 1.4),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
 
-    INP_CONFIG_BACK_GRID_Y = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 7.8),
-                            window_rect.centery - (INP_TEXT_HEIGHT * 1.1),
+    INP_CONFIG_BACK_GRID_Y = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 8),
+                            window_rect.centery - (INP_TEXT_HEIGHT * 1.4),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
     
     INP_CONFIG_STRIKER_GRID_X = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 5.9),
                             window_rect.centery - (INP_TEXT_HEIGHT * 4.4),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
 
-    INP_CONFIG_STRIKER_GRID_Y = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 7.8),
+    INP_CONFIG_STRIKER_GRID_Y = pygame.rect.Rect(window_rect.centerx + (INP_TEXT_WIDTH * 8),
                             window_rect.centery - (INP_TEXT_HEIGHT * 4.4),
                             INP_TEXT_WIDTH, INP_TEXT_HEIGHT)
     
@@ -1131,25 +1137,25 @@ def Simulator():
                "MODE 4": LEFT_CORNER,
                "MODE 5": MODE_5,
                "BACK": BACK,
-               "DUMMY 1": KOTAK,
-               "DUMMY 2": DUMMY,
-               "DUMMY 3": KOTAK_DUMMY}
+               "1": KOTAK,
+               "2": DUMMY,
+               "3": KOTAK_DUMMY}
     
     #####################################################################################################################################
     #####################################################################################################################################
     #####################################################################################################################################
 
     #MENGATUR POSISI TEXT PESAN DARI REFBOX
-    MASSAGE = pygame.rect.Rect(window_rect.centerx - (TEXT_MSG_WIDTH * 3.52)
+    MASSAGE = pygame.rect.Rect(window_rect.centerx - (TEXT_MSG_WIDTH * 3.6)
                                       ,window_rect.centery + (TEXT_MSG_HEIGHT * 7.75),
                                       TEXT_MSG_WIDTH,TEXT_MSG_HEIGHT)
 
     #MENGATUR POSISI TEXT PESAN ROBOT
-    KIPER = pygame.rect.Rect(window_rect.centerx + (TEXT_ROBOT_WIDTH * 3.3),
+    KIPER = pygame.rect.Rect(window_rect.centerx + (TEXT_ROBOT_WIDTH * 3.5),
                             window_rect.centery + (TEXT_ROBOT_HEIGHT * 7.52),
                             TEXT_ROBOT_WIDTH, TEXT_ROBOT_HEIGHT)
 
-    BACK = pygame.rect.Rect(window_rect.centerx + (TEXT_ROBOT_WIDTH * 0.85),
+    BACK = pygame.rect.Rect(window_rect.centerx + (TEXT_ROBOT_WIDTH * 1.19),
                             window_rect.centery + (TEXT_ROBOT_HEIGHT * 7.52),
                             TEXT_ROBOT_WIDTH, TEXT_ROBOT_HEIGHT)
 
@@ -1173,51 +1179,51 @@ def Simulator():
     #####################################################################################################################################
 
     while varGlobals.runSim:
-        
+
         playGame()
 
         textsKiper = [
-        "robot_id     : " + str(dataRobot.robot_id[0]),
-        "kompas_value : " + str(dataRobot.kompas_value[0]),
-        "xpos         : " + str(dataRobot.xpos[0]),
-        "ypos         : " + str(dataRobot.ypos[0]),
-        "ball_value   : " + str(dataRobot.ball_value[0]),
+        "robot_id       : " + str(dataRobot.robot_id[0]),
+        "kompas_value   : " + str(dataRobot.kompas_value[0]),
+        "xpos           : " + str(dataRobot.xpos[0]),
+        "ypos           : " + str(dataRobot.ypos[0]),
+        "ball_value     : " + str(dataRobot.ball_value[0]),
         # "ball_distance: " + str(dataRobot.ball_distance[0]),
-        "enemy1_value : " + str(dataRobot.enemy1[0]),
-        "enemy2_value : " + str(dataRobot.enemy2[0]),
-        "enemy3_value : " + str(dataRobot.enemy3[0]),
-        "catch_ball   : " + str(dataRobot.catch_ball[0]),
-        "dummy 3      : " + str(varGlobals.index_C)
+        "enemy1_value   : " + str(dataRobot.enemy1[0]),
+        "enemy2_value   : " + str(dataRobot.enemy2[0]),
+        "enemy3_value   : " + str(dataRobot.enemy3[0]),
+        "catch_ball     : " + str(dataRobot.catch_ball[0]),
+        "dummy 3        : " + str(varGlobals.index_C)
         ]
 
         textsBack = [
-        "robot_id     : " + str(dataRobot.robot_id[1]),
-        "kompas_value : " + str(dataRobot.kompas_value[1]),
-        "xpos         : " + str(dataRobot.xpos[1]),
-        "ypos         : " + str(dataRobot.ypos[1]),
-        "ball_value   : " + str(dataRobot.ball_value[1]),
+        "robot_id       : " + str(dataRobot.robot_id[1]),
+        "kompas_value   : " + str(dataRobot.kompas_value[1]),
+        "xpos           : " + str(dataRobot.xpos[1]),
+        "ypos           : " + str(dataRobot.ypos[1]),
+        "ball_value     : " + str(dataRobot.ball_value[1]),
         # "ball_distance: " + str(dataRobot.ball_distance[1]),
         # "status_robot : " + str(dataRobot.status_robot[1]),
-        "enemy1_value : " + str(dataRobot.enemy1[1]),
-        "enemy2_value : " + str(dataRobot.enemy2[1]),
-        "enemy3_value : " + str(dataRobot.enemy3[1]),
-        "catch_ball   : " + str(dataRobot.catch_ball[1]),
-        "dummy 2      : " + str(varGlobals.index_B)
+        "enemy1_value   : " + str(dataRobot.enemy1[1]),
+        "enemy2_value   : " + str(dataRobot.enemy2[1]),
+        "enemy3_value   : " + str(dataRobot.enemy3[1]),
+        "catch_ball     : " + str(dataRobot.catch_ball[1]),
+        "dummy 2        : " + str(varGlobals.index_B)
         ]
 
         textsStriker = [
-        "robot_id     : " + str(dataRobot.robot_id[2]),
-        "kompas_value : " + str(dataRobot.kompas_value[2]),
-        "xpos         : " + str(dataRobot.xpos[2]),
-        "ypos         : " + str(dataRobot.ypos[2]),
-        "ball_value   : " + str(dataRobot.ball_value[2]),
+        "robot_id       : " + str(dataRobot.robot_id[2]),
+        "kompas_value   : " + str(dataRobot.kompas_value[2]),
+        "xpos           : " + str(dataRobot.xpos[2]),
+        "ypos           : " + str(dataRobot.ypos[2]),
+        "ball_value     : " + str(dataRobot.ball_value[2]),
         # "ball_distance: " + str(dataRobot.ball_distance[2]),
         # "status_robot : " + str(dataRobot.status_robot[2]),
-        "enemy1_value : " + str(dataRobot.enemy1[2]),
-        "enemy2_value : " + str(dataRobot.enemy2[2]),
-        "enemy3_value : " + str(dataRobot.enemy3[2]),
-        "catch_ball   : " + str(dataRobot.catch_ball[2]),
-        "dummy 1      : " + str(varGlobals.index_A)
+        "enemy1_value   : " + str(dataRobot.enemy1[2]),
+        "enemy2_value   : " + str(dataRobot.enemy2[2]),
+        "enemy3_value   : " + str(dataRobot.enemy3[2]),
+        "catch_ball     : " + str(dataRobot.catch_ball[2]),
+        "dummy 1        : " + str(varGlobals.index_A)
         ]
 
         # tinggi total konten
@@ -1232,7 +1238,7 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
         
-        # 
+        # SIMULASI ROBOT
         if varGlobals.cyan:                                                                                                                         
             draw_rotated_image(varGlobals.kiperCyan,                    
                                (varGlobals.offsetX+(dataRobot.ypos[0]*varGlobals.skala)-varGlobals.offsetResetPosX),                    
@@ -1247,7 +1253,7 @@ def Simulator():
             draw_rotated_image(varGlobals.strikerCyan,                  
                                (varGlobals.offsetX+(dataRobot.ypos[2]*varGlobals.skala)-varGlobals.offsetResetPosX),                    
                                (varGlobals.offsetY+(dataRobot.xpos[2]*varGlobals.skala)-varGlobals.offsetResetPosY),                    
-                               dataRobot.kompas_value[2])                   
+                               dataRobot.kompas_value[2])
 
             # drawGoalPositionRandom((varGlobals.offsetX+(dataRobot.ypos[1]*varGlobals.skala)-varGlobals.offsetResetPosX),                  
             #                     (varGlobals.offsetY+(dataRobot.xpos[1]*varGlobals.skala)-varGlobals.offsetResetPosY),                     
@@ -1365,7 +1371,7 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
-        # DETEKSI BOLA
+        # DETEKSI BOLA LAMA
         # varGlobals.ball_x, varGlobals.ball_y = calculate_position((varGlobals.offsetX+(dataRobot.ypos[1])*varGlobals.skala)-varGlobals.offsetResetPosX, 
         #                                                   (varGlobals.offsetY+(dataRobot.xpos[1])*varGlobals.skala)-varGlobals.offsetResetPosY, 
         #                                                   dataRobot.ball_value[1], 
@@ -1485,28 +1491,42 @@ def Simulator():
             x_potong = (c2 - c1) / (m1 - m2)
             y_potong = m1 * x_potong + c1
 
-            jarak_robot_musuh = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong)
+            jarak_robot_musuh1 = hitung_jarak(dataRobot.xpos[1], dataRobot.ypos[1], x_potong, y_potong)
+            jarak_robot_musuh2 = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong) + 150
         else:
-            jarak_robot_musuh = None
+            jarak_robot_musuh1 = None
+            jarak_robot_musuh2 = None
+
+        #####################################################################################################################################
+        #####################################################################################################################################
+        #####################################################################################################################################
 
         # DECISION TREE
         json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
         data = read_json(json_filename) 
 
-        aksi = get_strategy(dataRobot.catch_ball[2])
-        strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
+        aksi = get_strategy(dataRobot.catch_ball[1], dataRobot.catch_ball[2])
+        strategi = get_action(aksi, 
+                              jarak_robot_musuh1,
+                              jarak_robot_musuh2, 
+                              dataRobot.ball_distance[1], 
+                              dataRobot.enemy1[1], 
+                              dataRobot.status_robot[1], 
+                              dataRobot.catch_ball[1], 
+                              dataRobot.catch_ball[2])
         varGlobals.CONFIG_DECISION_TREE = strategi
 
-        # Cek perubahan strategi atau aksi
-        if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
-            print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
-            print(f"Aksi : {aksi}")
-            print(f"Jarak : {jarak_robot_musuh}")
+        # # Cek perubahan strategi atau aksi
+        # if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
+        #     print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
+        #     print(f"Aksi : {aksi}")
+        #     print(f"Jarak : {jarak_robot_musuh2}")
 
-            # Simpan strategi & aksi terakhir agar tidak nge-print terus
-            varGlobals.last_strategy = strategi
-            varGlobals.last_action = aksi
+        #     # Simpan strategi & aksi terakhir agar tidak nge-print terus
+        #     varGlobals.last_strategy = strategi
+        #     varGlobals.last_action = aksi
 
+        # INISIALISASI TEXT DI SIMULATOR
         input_key_decision_tree = {varGlobals.CONFIG_DECISION_TREE:INP_CONFIG_DECISION_TREE}
 
         #####################################################################################################################################
@@ -1720,11 +1740,11 @@ def Simulator():
         # UNTUK BUTTON MENU
         for button in buttons:
             if buttons[button].collidepoint(mx, my):
-                pygame.draw.rect(varGlobals.screen, cc.FTEK2, buttons[button], border_radius=50)
+                pygame.draw.rect(varGlobals.screen, cc.FTEK, buttons[button], 3, border_radius=50)
                 if click:
                     button_action(button)
             else:
-                pygame.draw.rect(varGlobals.screen, cc.FTEK, buttons[button], border_radius=50)
+                pygame.draw.rect(varGlobals.screen, cc.BLUE_STONE, buttons[button], 3, border_radius=50)
             tts(varGlobals.screen, 
                 button, 
                 buttons[button].centerx, 
@@ -1795,7 +1815,7 @@ def Simulator():
                     add_back[txtBack].centerx,
                     add_back[txtBack].centery,
                     int(varGlobals.res[0]/110),
-                    cc.WHITE)
+                    cc.BLACK)
                 
         #####################################################################################################################################
         #####################################################################################################################################
@@ -1821,7 +1841,7 @@ def Simulator():
                     add_striker[txtStriker].centerx,
                     add_striker[txtStriker].centery,
                     int(varGlobals.res[0]/110),
-                    cc.WHITE)
+                    cc.BLACK)
                 
         #####################################################################################################################################
         #####################################################################################################################################
@@ -1847,7 +1867,7 @@ def Simulator():
                     add_kiper[txtKiper].centerx,
                     add_kiper[txtKiper].centery,
                     int(varGlobals.res[0]/110),
-                    cc.WHITE)
+                    cc.BLACK)
         
         #####################################################################################################################################
         #####################################################################################################################################
@@ -2099,32 +2119,10 @@ def Simulator():
         pygame.display.flip()
         varGlobals.clock.tick(60)
 
-        #####################################################################################################################################
-        #####################################################################################################################################
-        #####################################################################################################################################
-
-        # # DECISION TREE
-        # json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
-        # data = read_json(json_filename) 
-
-        # aksi = get_strategy(dataRobot.catch_ball[2])
-        # strategi = get_action(aksi, jarak_robot_musuh, dataRobot.ball_distance[2], dataRobot.enemy1[2], dataRobot.status_robot[2])
-        # varGlobals.CONFIG_DECISION_TREE = strategi
-
-        # # Cek perubahan strategi atau aksi
-        # if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
-        #     print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
-        #     print(f"Aksi : {aksi}")
-        #     print(f"Jarak : {jarak_robot_musuh}")
-
-        #     # Simpan strategi & aksi terakhir agar tidak nge-print terus
-        #     varGlobals.last_strategy = strategi
-        #     varGlobals.last_action = aksi
-
 ###############################################################################################################################################################################################
 ###############################################################################################################################################################################################
 ###############################################################################################################################################################################################
 
-mainMenu()
+Simulator()
 
 
