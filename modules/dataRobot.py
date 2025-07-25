@@ -12,6 +12,7 @@ enemy1 = [0,1,2]
 enemy2 = [0,1,2]
 enemy3 = [0,1,2]
 catch_ball = [0,1,2]
+angle = [0,1,2]
 connect = [0,1,2]
 
 ####################
@@ -78,10 +79,6 @@ def robotBack(data, address):
     elif data[7]==1:
         ball_value[1]=(360-data[8])
 
-    # status_robot[1] = data[9]
-
-    # ball_distance[1] = data[10]
-
     if data[9]==0:
         enemy1[1] = data[10]
     elif data[9]==1:
@@ -99,6 +96,8 @@ def robotBack(data, address):
 
     catch_ball[1] = data[15]
     connect[1] = data[16]
+
+    status_robot[1] = data[17]
 
 def robotStriker(data, address):
     global striker_robot_ip
@@ -119,10 +118,6 @@ def robotStriker(data, address):
     elif data[7]==1:
         ball_value[2]=(360-data[8])
 
-    # status_robot[2] = data[9]
-
-    # ball_distance[2] = data[10]
-
     if data[9]==0:
         enemy1[2] = data[10]
     elif data[9]==1:
@@ -140,6 +135,8 @@ def robotStriker(data, address):
 
     catch_ball[2] = data[15]
     connect[2] = data[16]
+
+    status_robot[2] = data[17]
 
     
     

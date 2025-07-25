@@ -37,21 +37,35 @@
         "Defense": [
             {
                 "ball_distance": 10,
-                "enemy1_value": "270",
-                "status_robot": 1,
-                "hasil": "bersiap menerima umpan"
+                "jarak_enemy1": 100,
+                "target_robot": 1,
+                "kejar_bola": true,
+                "ikuti_musuh": false,
+                "hasil": "Robot 1 kejar bola"
             },
             {
-                "ball_distance": 7,
-                "enemy1_value": "180",
-                "status_robot": 0,
-                "hasil": "menutup ruang lawan"
+                "ball_distance": 10,
+                "jarak_enemy1": 100,
+                "target_robot": 1,
+                "kejar_bola": false,
+                "ikuti_musuh": true,
+                "hasil": "Robot 1 ikuti musuh"
             },
             {
-                "ball_distance": 5,
-                "enemy1_value": "90",
-                "status_robot": 0,
-                "hasil": "pressing lawan"
+                "ball_distance": 10,
+                "jarak_enemy2": 100,
+                "target_robot": 2,
+                "kejar_bola": true,
+                "ikuti_musuh": false,
+                "hasil": "Robot 2 kejar bola"
+            },
+            {
+                "ball_distance": 10,
+                "jarak_enemy2": 100,
+                "target_robot": 2,
+                "kejar_bola": false,
+                "ikuti_musuh": true,
+                "hasil": "Robot 2 ikuti musuh"
             }
         ]
     }

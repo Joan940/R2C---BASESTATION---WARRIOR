@@ -2,8 +2,12 @@ import sys
 import math
 import time
 import pygame
-# from modules.uiTree import UI
 import modules.dataRobot as dataRobot
+from modules.dataRobot import (
+    robotBack,
+    robotKiper,
+    robotStriker
+)
 import modules.varGlobals as varGlobals
 from modules.font import text_to_screen as tts
 from modules.customColors import customColors as cc, text_to_screen as tts
@@ -17,6 +21,7 @@ from modules.comBasestation import (
     send_robot, 
     rec_UDP
 )
+from library.skillBaru import bezierCurve
 from library.algorithm import playGame
 from library.kickOffKanan import KickOffKanan
 from library.kickOffKiri import KickOffKiri
@@ -25,7 +30,8 @@ from library.cornerKiri import cornerKiri
 from modules.coreMain import (
     gambar_grid, 
     draw_rotated_image, 
-    calculate_position, 
+    calculate_position,
+    # calculate_angle,
     calculate_position_ball_single_robot, 
     draw_ball,
     draw_line_bola, 
@@ -34,8 +40,9 @@ from modules.coreMain import (
     draw_setBall, 
     move_dummy_sequentially, 
     draw_dummy,
-    hitung_jarak,
-    find_nearest_robot,
+    calculate_distance,
+    draw_line_teman,
+    draw_bezier_curve,
     read_json
 )
 from modules.decisionTree import (
@@ -269,25 +276,23 @@ def button_action(text):
     elif text == 'mode 4':
         varGlobals.updateDummy = False
 
-        data1 = [1, 255, 20, 10, 10, 8, 160, 0, 59, 0, 110, 0, 0, 0, 0, 1]
+        data1 = [1, 255, 1, 90, 14, 18, 160, 1, 85, 0, 110, 0, 0, 0, 0, 0, 1]
         back(data1)
-        data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 1, 0, 0, 0, 0, 0, 0]
+        data2 = [2, 255, 0, 90, 3, 18, 0, 0, 90, 1, 0, 0, 0, 0, 0, 0, 1]
         striker(data2)
 
         Simulator()
-
         varGlobals.updateDummy = True
 
     elif text == 'mode 5':
         varGlobals.updateDummy = False
 
-        data1 = [1, 255, 20, 10, 10, 8, 160, 0, 59, 0, 110, 0, 0, 0, 0, 1]
+        data1 = [1, 255, 20, 10, 10, 8, 160, 0, 70, 0, 110, 0, 0, 0, 0, 1, 0]
         back(data1)
-        data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 0, 35, 0, 0, 0, 0, 0]
+        data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 0, 35, 0, 0, 0, 0, 0, 1]
         striker(data2)
 
         Simulator()
-
         varGlobals.updateDummy = True
 
     elif text == '1':
@@ -1064,7 +1069,7 @@ def Simulator():
     checkboxMagenta_clicked = False
 
     # frame congfig
-    frame_width = varGlobals.res[0] * 0.15
+    frame_width = varGlobals.res[0] * 0.157
     frame_height = varGlobals.res[1] * 0.14
     frame_color = cc.WHITE
     frame_thickness = 2
@@ -1078,7 +1083,7 @@ def Simulator():
     frame_back = pygame.Surface((frame_width, frame_height))
     frame_kiper = pygame.Surface((frame_width, frame_height))
 
-    text_font = pygame.font.Font('/home/joan/Downloads/BASESTATION - R2C - WARRIOR (coba)/assets/Consolas.ttf', int(varGlobals.res[0]/70))
+    text_font = pygame.font.Font('/media/joan/Windows-SSD/Users/LENOVO/BASESTATION/assets/Consolas.ttf', int(varGlobals.res[0]/75))
     text_color = cc.BLACK
 
     # inisialisasi posisi 
@@ -1203,7 +1208,7 @@ def Simulator():
         "ypos           : " + str(dataRobot.ypos[1]),
         "ball_value     : " + str(dataRobot.ball_value[1]),
         # "ball_distance: " + str(dataRobot.ball_distance[1]),
-        # "status_robot : " + str(dataRobot.status_robot[1]),
+        "status_robot   : " + str(dataRobot.status_robot[1]),
         "enemy1_value   : " + str(dataRobot.enemy1[1]),
         "enemy2_value   : " + str(dataRobot.enemy2[1]),
         "enemy3_value   : " + str(dataRobot.enemy3[1]),
@@ -1218,7 +1223,7 @@ def Simulator():
         "ypos           : " + str(dataRobot.ypos[2]),
         "ball_value     : " + str(dataRobot.ball_value[2]),
         # "ball_distance: " + str(dataRobot.ball_distance[2]),
-        # "status_robot : " + str(dataRobot.status_robot[2]),
+        "status_robot   : " + str(dataRobot.status_robot[2]),
         "enemy1_value   : " + str(dataRobot.enemy1[2]),
         "enemy2_value   : " + str(dataRobot.enemy2[2]),
         "enemy3_value   : " + str(dataRobot.enemy3[2]),
@@ -1322,39 +1327,26 @@ def Simulator():
         #####################################################################################################################################
 
         # DETEKSI KOORDINAT BOLA
-        # Hitung posisi robot 1 dalam skala simulasi
         robo1_x = varGlobals.offsetX + (dataRobot.ypos[1] * varGlobals.skala) - varGlobals.offsetResetPosX
         robo1_y = varGlobals.offsetY + (dataRobot.xpos[1] * varGlobals.skala) - varGlobals.offsetResetPosY
 
-        # Hitung posisi robot 2 dalam skala simulasi
         robo2_x = varGlobals.offsetX + (dataRobot.ypos[2] * varGlobals.skala) - varGlobals.offsetResetPosX
         robo2_y = varGlobals.offsetY + (dataRobot.xpos[2] * varGlobals.skala) - varGlobals.offsetResetPosY
 
-        # Hitung posisi bola menggunakan fungsi calculate_position()
         varGlobals.ball_x, varGlobals.ball_y = calculate_position(
             robo1_x, robo1_y, dataRobot.ball_value[1],  # Posisi & sudut bola dari robot 1
             robo2_x, robo2_y, dataRobot.ball_value[2]   # Posisi & sudut bola dari robot 2
         )
-
-        #####################################################################################################################################
-        #####################################################################################################################################
-        #####################################################################################################################################
         
-        # MENGGAMBAR GARIS DAN BOLA
-        if (((varGlobals.ball_x<varGlobals.offsetX+((varGlobals.lapanganResX)*varGlobals.skala) and 
-           varGlobals.ball_x>varGlobals.offsetX)) and 
-           (varGlobals.ball_y<varGlobals.offsetY+((varGlobals.lapanganResY)*varGlobals.skala) and 
-           varGlobals.ball_y>varGlobals.offsetY)):
+        if (((varGlobals.ball_x < varGlobals.offsetX + ((varGlobals.lapanganResX) * varGlobals.skala) and 
+           varGlobals.ball_x > varGlobals.offsetX)) and 
+           (varGlobals.ball_y < varGlobals.offsetY + ((varGlobals.lapanganResY) * varGlobals.skala) and 
+           varGlobals.ball_y > varGlobals.offsetY)):
             
+            bezierCurve(1, robo1_x, robo1_y, robo2_x, robo2_y, 50)
             draw_ball(varGlobals.ball_x, varGlobals.ball_y)
-
-            draw_line_bola((varGlobals.offsetX+(dataRobot.ypos[1]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                           (varGlobals.offsetY+(dataRobot.xpos[1]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                           varGlobals.ball_x,varGlobals.ball_y)
-            
-            draw_line_bola((varGlobals.offsetX+(dataRobot.ypos[2]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                           (varGlobals.offsetY+(dataRobot.xpos[2]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                           varGlobals.ball_x,varGlobals.ball_y)
+            draw_line_bola(robo1_x, robo1_y, varGlobals.ball_x, varGlobals.ball_y)
+            draw_line_bola(robo2_x, robo2_y, varGlobals.ball_x, varGlobals.ball_y)
 
             # getBall = True
             # if getBall:
@@ -1371,108 +1363,65 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
-        # DETEKSI BOLA LAMA
-        # varGlobals.ball_x, varGlobals.ball_y = calculate_position((varGlobals.offsetX+(dataRobot.ypos[1])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-        #                                                   (varGlobals.offsetY+(dataRobot.xpos[1])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-        #                                                   dataRobot.ball_value[1], 
-        #                                                   (varGlobals.offsetX+(dataRobot.ypos[2])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-        #                                                   (varGlobals.offsetY+(dataRobot.xpos[2])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-        #                                                   dataRobot.ball_value[2])
-
-        # if (((varGlobals.ball_x < varGlobals.offsetX + ((varGlobals.lapanganResX) * varGlobals.skala) and 
-        #     varGlobals.ball_x > varGlobals.offsetX)) and 
-        #     (varGlobals.ball_y < varGlobals.offsetY + ((varGlobals.lapanganResY) * varGlobals.skala) and 
-        #     varGlobals.ball_y > varGlobals.offsetY)):
+        # DETEKSI MUSUH 1
+        varGlobals.musuh1_x, varGlobals.musuh1_y = calculate_position(
+            robo1_x, robo1_y, dataRobot.enemy1[1],  # Posisi & sudut musuh dari robot 1
+            robo2_x, robo2_y, dataRobot.enemy1[2]   # Posisi & sudut musuh dari robot 2
+        )
         
-        #     robot_x = (varGlobals.offsetX + (dataRobot.ypos[1]) * varGlobals.skala) - varGlobals.offsetResetPosX
-        #     robot_y = (varGlobals.offsetY + (dataRobot.xpos[1]) * varGlobals.skala) - varGlobals.offsetResetPosY
-        #     distance = calculate_distance(robot_x, robot_y, varGlobals.ball_x, varGlobals
-
-        #####################################################################################################################################
-        #####################################################################################################################################
-        #####################################################################################################################################
-
-        # DETEKSI MUSUH1
-        varGlobals.musuh1_x, varGlobals.musuh1_y = calculate_position((varGlobals.offsetX+(dataRobot.ypos[1])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[1])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-                                                dataRobot.enemy1[1], 
-                                                (varGlobals.offsetX+(dataRobot.ypos[2])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[2])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-                                                dataRobot.enemy1[2])
-        
-        if (((varGlobals.musuh1_x<varGlobals.offsetX+((varGlobals.lapanganResX)*varGlobals.skala) and 
-           varGlobals.musuh1_x>varGlobals.offsetX)) and 
-           (varGlobals.musuh1_y<varGlobals.offsetY+((varGlobals.lapanganResY)*varGlobals.skala) and 
-           varGlobals.musuh1_y>varGlobals.offsetY)):
+        if (((varGlobals.musuh1_x < varGlobals.offsetX + ((varGlobals.lapanganResX) * varGlobals.skala) and 
+           varGlobals.musuh1_x > varGlobals.offsetX)) and 
+           (varGlobals.musuh1_y < varGlobals.offsetY + ((varGlobals.lapanganResY) * varGlobals.skala) and 
+           varGlobals.musuh1_y > varGlobals.offsetY)):
             
             draw_musuh(varGlobals.musuh1_x, varGlobals.musuh1_y)
-            
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[1]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[1]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh1_x,varGlobals.musuh1_y)
-            
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[2]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[2]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh1_x,varGlobals.musuh1_y)
+            draw_line_musuh(robo1_x, robo1_y, varGlobals.musuh1_x, varGlobals.musuh1_y)
+            draw_line_musuh(robo2_x, robo2_y, varGlobals.musuh1_x, varGlobals.musuh1_y)
             
         #####################################################################################################################################
         #####################################################################################################################################
         #####################################################################################################################################
 
-        #DETEKSI MUSUH2
-        varGlobals.musuh2_x, varGlobals.musuh2_y = calculate_position((varGlobals.offsetX+(dataRobot.ypos[1])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[1])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-                                                dataRobot.enemy2[1], 
-                                                (varGlobals.offsetX+(dataRobot.ypos[2])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[2])*varGlobals.skala)-varGlobals.offsetResetPosY, 
-                                                dataRobot.enemy2[2])
+        # DETEKSI MUSUH 2
+        varGlobals.musuh2_x, varGlobals.musuh2_y = calculate_position(
+            robo1_x, robo1_y, dataRobot.enemy2[1],  # Posisi & sudut musuh dari robot 1
+            robo2_x, robo2_y, dataRobot.enemy2[2]   # Posisi & sudut musuh dari robot 2
+        )
         
-        if (((varGlobals.musuh2_x<varGlobals.offsetX+((varGlobals.lapanganResX)*varGlobals.skala) and 
-           varGlobals.musuh2_x>varGlobals.offsetX)) and 
-           (varGlobals.musuh2_y<varGlobals.offsetY+((varGlobals.lapanganResY)*varGlobals.skala) and 
-           varGlobals.musuh2_y>varGlobals.offsetY)):
+        if (((varGlobals.musuh2_x < varGlobals.offsetX + ((varGlobals.lapanganResX) * varGlobals.skala) and 
+           varGlobals.musuh2_x > varGlobals.offsetX)) and 
+           (varGlobals.musuh2_y < varGlobals.offsetY + ((varGlobals.lapanganResY) * varGlobals.skala) and 
+           varGlobals.musuh2_y > varGlobals.offsetY)):
             
             draw_musuh(varGlobals.musuh2_x, varGlobals.musuh2_y)
-            
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[1]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[1]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh2_x,varGlobals.musuh2_y)
-            
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[2]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[2]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh2_x,varGlobals.musuh2_y)
+            draw_line_musuh(robo1_x, robo1_y, varGlobals.musuh2_x, varGlobals.musuh2_y)
+            draw_line_musuh(robo2_x, robo2_y, varGlobals.musuh2_x, varGlobals.musuh2_y)
             
         #####################################################################################################################################
         #####################################################################################################################################
         #####################################################################################################################################
 
-        #DETEKSI MUSUH3  
-        varGlobals.musuh3_x, varGlobals.musuh3_y = calculate_position((varGlobals.offsetX+(dataRobot.ypos[1])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[1])*varGlobals.skala), 
-                                                dataRobot.enemy3[1], 
-                                                (varGlobals.offsetX+(dataRobot.ypos[2])*varGlobals.skala)-varGlobals.offsetResetPosX, 
-                                                (varGlobals.offsetY+(dataRobot.xpos[2])*varGlobals.skala), 
-                                                dataRobot.enemy3[2])
+        # DETEKSI MUSUH 3  
+        varGlobals.musuh3_x, varGlobals.musuh3_y = calculate_position(
+            robo1_x, robo1_y, dataRobot.enemy3[1],  # Posisi & sudut musuh dari robot 1
+            robo2_x, robo2_y, dataRobot.enemy3[2]   # Posisi & sudut musuh dari robot 2
+        )
         
-        #varGlobals.musuh3_x, varGlobals.musuh3_y =varGlobals.offsetX+(1120*varGlobals.skala)+varGlobals.offsetResetPosX, (450*varGlobals.skala)+varGlobals.offsetResetPosY-varGlobals.offsetY
-        #varGlobals.musuh3_x, varGlobals.musuh3_y = 1200,400
-        
-        
-        if (((varGlobals.musuh3_x<varGlobals.offsetX+((varGlobals.lapanganResX)*varGlobals.skala) and 
-           varGlobals.musuh3_x>varGlobals.offsetX)) and 
-           (varGlobals.musuh3_y<varGlobals.offsetY+((varGlobals.lapanganResY)*varGlobals.skala) and 
-           varGlobals.musuh3_y>varGlobals.offsetY)):
+        if (((varGlobals.musuh3_x < varGlobals.offsetX + ((varGlobals.lapanganResX) * varGlobals.skala) and 
+           varGlobals.musuh3_x > varGlobals.offsetX)) and 
+           (varGlobals.musuh3_y < varGlobals.offsetY + ((varGlobals.lapanganResY) * varGlobals.skala) and 
+           varGlobals.musuh3_y > varGlobals.offsetY)):
             
             draw_musuh(varGlobals.musuh3_x, varGlobals.musuh3_y)
+            draw_line_musuh(robo1_x, robo1_y, varGlobals.musuh3_x, varGlobals.musuh3_y)
+            draw_line_musuh(robo2_x, robo2_y, varGlobals.musuh3_x, varGlobals.musuh3_y)
             
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[1]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[1]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh3_x,varGlobals.musuh3_y)
-            
-            draw_line_musuh((varGlobals.offsetX+(dataRobot.ypos[2]*varGlobals.skala)-varGlobals.offsetResetPosX), 
-                            (varGlobals.offsetY+(dataRobot.xpos[2]*varGlobals.skala)-varGlobals.offsetResetPosY), 
-                            varGlobals.musuh3_x,varGlobals.musuh3_y)
-            
+        #####################################################################################################################################
+        #####################################################################################################################################
+        #####################################################################################################################################
+
+        # DETEKSI TEMAN
+        
         #####################################################################################################################################
         #####################################################################################################################################
         #####################################################################################################################################
@@ -1491,18 +1440,21 @@ def Simulator():
             x_potong = (c2 - c1) / (m1 - m2)
             y_potong = m1 * x_potong + c1
 
-            jarak_robot_musuh1 = hitung_jarak(dataRobot.xpos[1], dataRobot.ypos[1], x_potong, y_potong)
-            jarak_robot_musuh2 = hitung_jarak(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong) + 150
+            jarak_robot_musuh1 = calculate_distance(dataRobot.xpos[1], dataRobot.ypos[1], x_potong, y_potong)
+            jarak_robot_musuh2 = calculate_distance(dataRobot.xpos[2], dataRobot.ypos[2], x_potong, y_potong)
         else:
             jarak_robot_musuh1 = None
             jarak_robot_musuh2 = None
+
+        varGlobals.jarak_musuh1 = jarak_robot_musuh1
+        varGlobals.jarak_musuh2 = jarak_robot_musuh2
 
         #####################################################################################################################################
         #####################################################################################################################################
         #####################################################################################################################################
 
         # DECISION TREE
-        json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION - R2C - WARRIOR (coba)/modules/strategy.json'
+        json_filename = '/media/joan/Windows-SSD/Users/LENOVO/BASESTATION/modules/strategy.json'
         data = read_json(json_filename) 
 
         aksi = get_strategy(dataRobot.catch_ball[1], dataRobot.catch_ball[2])
@@ -1516,11 +1468,11 @@ def Simulator():
                               dataRobot.catch_ball[2])
         varGlobals.CONFIG_DECISION_TREE = strategi
 
-        # # Cek perubahan strategi atau aksi
+        # Cek perubahan strategi atau aksi
         # if strategi != varGlobals.last_strategy or aksi != varGlobals.last_action:
         #     print(f"Strategi : {varGlobals.CONFIG_DECISION_TREE}")
         #     print(f"Aksi : {aksi}")
-        #     print(f"Jarak : {jarak_robot_musuh2}")
+        #     print(f"Jarak : {varGlobals.jarak_musuh1}")
 
         #     # Simpan strategi & aksi terakhir agar tidak nge-print terus
         #     varGlobals.last_strategy = strategi
@@ -1616,6 +1568,8 @@ def Simulator():
                 if event.key in keys:
                     keys[event.key] = False
                     
+
+            # content_total_height = 50
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if event.button == 4:  # Scroll mouse ke atas
                     content_y += 30
@@ -2000,17 +1954,17 @@ def Simulator():
         #####################################################################################################################################
         #####################################################################################################################################
 
-        # menggambar frame
+        # MENGGAMBAR FRAME (DI BAWAH STATUS DISCONECT ROBOT)
         varGlobals.screen.blit(frame_striker, 
-                               ((window_rect.centerx - frame_width * 1.2), 
+                               ((window_rect.centerx - frame_width * 1.16), 
                                window_rect.centery + frame_height * 2.23))
         
         varGlobals.screen.blit(frame_back, 
-                               ((window_rect.centerx + frame_width * 0.37), 
+                               ((window_rect.centerx + frame_width * 0.34), 
                                window_rect.centery + frame_height * 2.23))
         
         varGlobals.screen.blit(frame_kiper, 
-                               ((window_rect.centerx + frame_width * 1.92), 
+                               ((window_rect.centerx + frame_width * 1.81), 
                                window_rect.centery + frame_height * 2.23))
 
         pygame.draw.circle(varGlobals.screen, 
@@ -2123,6 +2077,6 @@ def Simulator():
 ###############################################################################################################################################################################################
 ###############################################################################################################################################################################################
 
-Simulator()
+mainMenu()
 
 

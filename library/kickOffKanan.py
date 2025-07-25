@@ -16,7 +16,6 @@ from library.skillBaru import (
     lihatBolaGeser,
     dribbling,
     passing,
-    hindari_dummy,
     siapTendang
 )
 

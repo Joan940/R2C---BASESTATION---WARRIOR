@@ -14,7 +14,7 @@ catch_ball = [0,1,2]
 connect = [0,1,2]
 
 def kiper(data):
-    send=bytearray(17)
+    send=bytearray(18)
     if data[1]==255:
         send[0]=0
         send[1]=data[2]
@@ -23,16 +23,17 @@ def kiper(data):
         send[4]=((data[4]*50)+25) & 0xFF
         send[5]=(((data[5]*50)+25) >> 8) & 0xFF
         send[6]=((data[5]*50)+25) & 0xFF
-        send[7]=0
-        send[8]=0
-        send[9]=0
-        send[10]=0
-        send[11]=0
-        send[12]=0
-        send[13]=0
-        send[14]=0
-        send[15]=0
+        send[7]=data[7]
+        send[8]=data[8]
+        send[9]=data[9]
+        send[10]=data[10]
+        send[11]=data[11]
+        send[12]=data[12]
+        send[13]=data[13]
+        send[14]=data[14]
+        send[15]=data[15]
         send[16]=1
+        send[17]=data[16]
         sleep(0.15)
         send_robot(send)
 
@@ -50,7 +51,7 @@ def kiper(data):
     print("kiper")
     
 def back(data):
-    send=bytearray(17)
+    send=bytearray(18)
     if data[1]==255:
         send[0]=1
         send[1]=data[2]
@@ -69,7 +70,12 @@ def back(data):
         send[14]=data[14]
         send[15]=data[15]
         send[16]=1
+        send[17]=data[16]
         # send[17]=data[6]
+        # print("send[3]:", send[3])
+        # print("send[4]:", send[4])
+        # print("send[5]:", send[5])
+        # print("send[6]:", send[6])
         sleep(0.15)
         send_robot(send)
 
@@ -104,7 +110,7 @@ def back(data):
     print("back")
     
 def striker(data):
-    send=bytearray(17)
+    send=bytearray(18)
     if data[1]==255:
         send[0]=2
         send[1]=data[2]
@@ -123,7 +129,11 @@ def striker(data):
         send[14]=data[14]
         send[15]=data[15]
         send[16]=1
+        send[17]=data[16]
         # send[17]=data[6]
+
+        # print("send[3]:", send[3])
+        # print("send[4]:", send[4])
         sleep(0.15)
         send_robot(send)
 
@@ -146,10 +156,10 @@ def striker(data):
         send[0]=2
         send[1]=0
         send[2]=0
-        send[3]=(((data[2]*50)+25) >> 8) & 0xFF
-        send[4]=((data[2]*50)+25) & 0xFF
-        send[5]=(((data[3]*50)+25) >> 8) & 0xFF
-        send[6]=((data[3]*50)+25) & 0xFF
+        send[3]=(((data[2] * 50) + 25) >> 8) & 0xFF
+        send[4]=((data[2] * 50) + 25) & 0xFF
+        send[5]=(((data[3] * 50) + 25) >> 8) & 0xFF
+        send[6]=((data[3] * 50) + 25) & 0xFF
         send[16]=1
         sleep(0.15)
         send_robot(send)
