@@ -70,9 +70,7 @@ from modules.decisionTree import (
 varGlobals.IP = '10.48.132.5'
 varGlobals.PORT_IP = '28097'
 varGlobals.ADDRESS = '224.16.32.110'
-# varGlobals.ADDRESS = '172.11.13.109'
 varGlobals.PORT_ADD = '12478'
-# varGlobals.PORT_ADD = '8081'
 varGlobals.MESSAGE_REFBOX = 'DISCONNECTED'
 varGlobals.ref=False
 varGlobals.udp=False
@@ -106,12 +104,32 @@ varGlobals.magenta=False
 #############################################################################################
 
 def button_action(text):
+    """
+    @brief Menangani logika aksi berdasarkan teks tombol yang ditekan oleh pengguna.
     
-    data=bytearray(5)
+    @param text (str) - Input teks dari tombol menu yang dipilih, seperti 'start', 'exit', 'mode 1', dll.
+    
+    @details Fungsi ini menggunakan berbagai kondisi `if-elif` untuk menentukan aksi yang akan dijalankan.
+    Tindakan mencakup:
+    - Memulai simulasi
+    - Menyimpan konfigurasi
+    - Menghubungkan Refbox/Basestation
+    - Menjalankan strategi seperti kick off dan corner
+    - Mengontrol formasi robot (grid)
+    - Mengatur pergerakan dummy
+    - Panic stop
+    - Kembali ke menu utama
 
-    #LOGIKA TOMBOL
+    @note Beberapa bagian menggunakan protokol UDP untuk mengirim perintah ke robot melalui `send_robot(data)`.
+    """
+
+    data = bytearray(5)
+
+    # Normalisasi input
     text = text.lower() 
+
     if text == 'start':
+        ## @brief Memulai simulasi utama dari permainan robot
         print("start")
         varGlobals.runMenu=False
         varGlobals.runConf=False
@@ -119,15 +137,18 @@ def button_action(text):
         mainMenu()
 
     elif text == 'exit':
+        ## @brief Keluar dari program
         sys.exit()
 
     elif text == 'robot configuration':
+        ## @brief Masuk ke halaman konfigurasi posisi robot
         print("robot configuration")
         varGlobals.runMenu=False
         varGlobals.runSim=False
         robotConfiguration()
 
     elif text == 'connect':
+        ## @brief Menghubungkan ke Refbox (jika belum terhubung)
         if not varGlobals.ref:
             print("connect refbox")
             # connect_refbox()
@@ -136,6 +157,7 @@ def button_action(text):
             mainMenu()
 
     elif text == 'connected':
+        ## @brief Memutus koneksi dari Refbox
         if varGlobals.ref:
             varGlobals.MESSAGE_REFBOX="DISCONNECTED"
             varGlobals.refbox.close()
@@ -146,14 +168,15 @@ def button_action(text):
             mainMenu()
 
     elif text == 'bind':
+        ## @brief Melakukan bind ke basestation via UDP
         print("bind basestation")
         varGlobals.udp=True
         varGlobals.BIND='SUCCESS'
         startBs()
-        # simStart()
         mainMenu()
 
     elif text == 'success':
+        ## @brief Unbind dan reset status koneksi robot
         varGlobals.BIND = 'BIND'
         print("unbind basestation")
         varGlobals.kiper = False
@@ -165,11 +188,13 @@ def button_action(text):
         varGlobals.udp = False
         mainMenu()
 
-    elif text =='save':
+    elif text == 'save':
+        ## @brief Menyimpan konfigurasi dan kembali ke menu
         print("Configuration Saved")
         mainMenu()
 
-    elif text =='park':
+    elif text == 'park':
+        ## @brief Mengirim perintah park untuk semua robot
         print("park")
         for i in range(5):
             data[0]=255
@@ -180,7 +205,8 @@ def button_action(text):
         send_robot(data)
         Simulator()
 
-    elif text =='park1':
+    elif text == 'park1':
+        ## @brief Alternatif mode park robot
         print("park1")
         for i in range(5):
             data[0]=255
@@ -191,7 +217,8 @@ def button_action(text):
         send_robot(data)
         Simulator()
 
-    elif text =='grid striker':
+    elif text == 'grid striker':
+        ## @brief Menyusun striker pada grid yang telah ditentukan
         print("grid striker")
         for i in range(5):
             data[0]=255
@@ -202,7 +229,8 @@ def button_action(text):
         send_robot(data)
         Simulator()
 
-    elif text =='grid back':
+    elif text == 'grid back':
+        ## @brief Menyusun back pada grid
         print("grid back")
         for i in range(5):
             data[0]=255
@@ -213,7 +241,8 @@ def button_action(text):
         send_robot(data)
         Simulator()
 
-    elif text =='grid kiper':
+    elif text == 'grid kiper':
+        ## @brief Menyusun kiper pada grid
         print("grid kiper")
         for i in range(5):
             data[0]=255
@@ -225,7 +254,7 @@ def button_action(text):
         Simulator()
 
     elif text == 'mode 1':
-        # print("kick off kanan")
+        ## @brief Menjalankan skenario Kick Off Kanan
         data[0] = 255
         data[1] = 83
         send_robot(data)
@@ -238,9 +267,9 @@ def button_action(text):
         data[0] = 255
         data[1] = 90
         send_robot(data)
-        # Simulator()
 
-    elif text =='mode 2':
+    elif text == 'mode 2':
+        ## @brief Menjalankan skenario Kick Off Kiri
         print("kick off kiri")
         data[0] = 255
         data[1] = 84
@@ -254,15 +283,14 @@ def button_action(text):
         data[0] = 255
         data[1] = 90
         send_robot(data)
-        # Simulator()
 
-    elif text =='mode 3':
+    elif text == 'mode 3':
+        ## @brief Menjalankan simulasi skenario Corner Kanan
         print("corner kanan")
         data[0] = 255
         data[1] = 84
         send_robot(data)
         # cornerKanan()
-        # varGlobals.CORNERKANAN = True
         if varGlobals.terimaData == False :
             for i in range(5):
                 data[0] = 255
@@ -274,31 +302,29 @@ def button_action(text):
         Simulator()
 
     elif text == 'mode 4':
+        ## @brief Menjalankan simulasi dengan posisi awal dummy statis
         varGlobals.updateDummy = False
-
         data1 = [1, 255, 1, 90, 14, 18, 160, 1, 85, 0, 110, 0, 0, 0, 0, 0, 1]
         back(data1)
         data2 = [2, 255, 0, 90, 3, 18, 0, 0, 90, 1, 0, 0, 0, 0, 0, 0, 1]
         striker(data2)
-
         Simulator()
         varGlobals.updateDummy = True
 
     elif text == 'mode 5':
+        ## @brief Menjalankan simulasi dengan posisi awal dummy acak
         varGlobals.updateDummy = False
-
         data1 = [1, 255, 20, 10, 10, 8, 160, 0, 70, 0, 110, 0, 0, 0, 0, 1, 0]
         back(data1)
         data2 = [2, 255, 10, 5, 5, 5, 0, 1, 90, 0, 35, 0, 0, 0, 0, 0, 1]
         striker(data2)
-
         Simulator()
         varGlobals.updateDummy = True
 
     elif text == '1':
+        ## @brief Memindahkan posisi dummy ke preset 1
         global index_A, index_B, index_C
         varGlobals.updateDummy = True
-
         pindah_posisi_dummy1()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
@@ -306,8 +332,8 @@ def button_action(text):
         Simulator()
 
     elif text == '2':
+        ## @brief Memindahkan posisi dummy ke preset 2
         varGlobals.updateDummy = True
-
         pindah_posisi_dummy2()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
@@ -315,15 +341,16 @@ def button_action(text):
         Simulator()
 
     elif text == '3':
+        ## @brief Memindahkan posisi dummy ke preset 3
         varGlobals.updateDummy = True
-        
         pindah_posisi_dummy3()
         varGlobals.index_A -= 1
         varGlobals.index_B -= 1
         varGlobals.index_C -= 1
         # Simulator()
 
-    elif text =='stop':
+    elif text == 'stop':
+        ## @brief Panic stop: menghentikan semua robot secara darurat
         send=bytearray(3)
         print("panic stop")
         for i in range(3):
@@ -333,13 +360,16 @@ def button_action(text):
             send_robot(send)
             time.sleep(0.15)
         Simulator()
-        
-    elif text =='back':
+
+    elif text == 'back':
+        ## @brief Kembali ke tampilan menu utama
         print("back to menu")
         mainMenu()
 
     else:
+        ## @brief Jika input tidak dikenali
         print('invalid entry')
+
 
 #############################################################################################
 #                                    MENGGAMBAR DUMMY                                       #
