@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['back_0',['back',['../namespace_main.html#a54e743c0801552da88b5e6500aa7d782',1,'Main.back'],['../namespacemodules_1_1var_globals.html#abf2c180af915fc7404d5fda9a3c70919',1,'modules.varGlobals.back']]],
+  ['back_5frobot_5fip_1',['back_robot_ip',['../namespacemodules_1_1data_robot.html#a2a8a9bacc2ffc769eeb61816d984847d',1,'modules::dataRobot']]],
+  ['backcyan_2',['backCyan',['../namespacemodules_1_1var_globals.html#af42bac5a1a8b30822cde7252377ea3a1',1,'modules::varGlobals']]],
+  ['backmagenta_3',['backMagenta',['../namespacemodules_1_1var_globals.html#a9506cab3904b6186db5f2f4bbbbc53a9',1,'modules::varGlobals']]],
+  ['ball_5fdistance_4',['ball_distance',['../namespacemodules_1_1data_robot.html#a8008b8fb5936eb23f376bd02e1bd1e0f',1,'modules::dataRobot']]],
+  ['ball_5fvalue_5',['ball_value',['../namespacemodules_1_1data_robot.html#ae2618a9475e375579fdebc7c44257e72',1,'modules.dataRobot.ball_value'],['../namespacemodules_1_1sim_robot.html#ac6b90817b295495b8a25181ff9327864',1,'modules.simRobot.ball_value']]],
+  ['ball_5fx_6',['ball_x',['../namespacemodules_1_1var_globals.html#a3f057da392b454f2e3309caf93a660f1',1,'modules::varGlobals']]],
+  ['ball_5fy_7',['ball_y',['../namespacemodules_1_1var_globals.html#a3667b343e38afe5c076f2306c6b6ee36',1,'modules::varGlobals']]],
+  ['bgconf_8',['bgConf',['../namespacemodules_1_1var_globals.html#a8071e7614532b84fb8d220017bfca53d',1,'modules::varGlobals']]],
+  ['bgmenu_9',['bgMenu',['../namespacemodules_1_1var_globals.html#ab703ed16f4ea0ffa2a691d5f1d513672',1,'modules::varGlobals']]],
+  ['bgsim_10',['bgSim',['../namespacemodules_1_1var_globals.html#a8667d3fc8fb14d2cdcebbd4683ad1db7',1,'modules::varGlobals']]],
+  ['bind_11',['BIND',['../namespace_main.html#afe9c1990fc3d0346f7f1eb90b0958c60',1,'Main.BIND'],['../namespacemodules_1_1var_globals.html#adbf999950d26456f06e5d53a17285718',1,'modules.varGlobals.BIND']]],
+  ['black_12',['BLACK',['../classmodules_1_1custom_colors_1_1custom_colors.html#a7b4c26840d385b93abe6420e26cfaaf2',1,'modules::customColors::customColors']]],
+  ['blue_5fstone_13',['BLUE_STONE',['../classmodules_1_1custom_colors_1_1custom_colors.html#aad409625c129cf696ab9329347566229',1,'modules::customColors::customColors']]],
+  ['brown_14',['BROWN',['../classmodules_1_1custom_colors_1_1custom_colors.html#a1e49884da3ab5675f2ea15211dd89440',1,'modules::customColors::customColors']]],
+  ['buffer_5fdata_15',['buffer_data',['../namespacemodules_1_1com_basestation.html#ab4cf0a6c1dbb0a839a8fa8536bfb5142',1,'modules::comBasestation']]],
+  ['build_5fexe_5foptions_16',['build_exe_options',['../namespacemodules_1_1setup.html#aae6aaa7a7787583946ef4943b9557964',1,'modules::setup']]]
+];

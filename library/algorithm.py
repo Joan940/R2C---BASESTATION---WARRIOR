@@ -1,10 +1,16 @@
+##
+# @file algorithm.py
+# @brief Secara umum kode ini digunakan untuk mengarahkan strategi attack dan defense robot
+# 
+# Perlu digaris bawahi fungsi ini masih dalam tahap pengembangan
+#
 import modules.varGlobals as varGlobals
 import threading
-# from lib.kickOff import kickoffMusuh,kickoffTeam
-# from lib.freekick import freeKickMusuh,freeKickTeam
-# from lib.goalKick import goalKickMusuh,goalKickTeam
+# from lib.kickOff import kickoffMusuh, kickoffTeam
+# from lib.freekick import freeKickMusuh, freeKickTeam
+# from lib.goalKick import goalKickMusuh, goalKickTeam
 # from lib.throwIn import throwInMusuh, throwInTeam
-# from lib.corner import cornerMusuh, cornerMusuh, cornerTeam
+# from lib.corner import cornerMusuh, cornerTeam
 # from lib.penalty import penaltyMusuh, penaltyTeam
 from library.stop import stop
 from library.start import start

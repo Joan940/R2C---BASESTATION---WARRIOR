@@ -1,9 +1,37 @@
+##
+# @file stop.py
+# @brief Modul untuk menghentikan semua aktivitas strategi dan mengatur robot ke mode standby.
+#
+# Fungsi ini digunakan untuk menghentikan seluruh fase permainan (kickoff, penalty, dll)
+# dan mengembalikan robot ke mode diam atau standby.
+#
+# Fungsi akan mengatur semua flag kontrol menjadi `False` dan mengirim perintah khusus
+# ke robot agar masuk ke mode berhenti.
+#
+# @note
+# Fungsi ini sangat penting untuk menjaga keamanan sistem dan mencegah aksi robot
+# di luar kontrol saat pertandingan berakhir atau diberi perintah "Stop".
+#
+# @details
+# - Mengatur semua status strategi (kickoff, free kick, throw-in, dll) ke `False`
+# - Menyalakan `varGlobals.stop = True` untuk masuk ke mode berhenti
+# - Mengirim bytearray berisi perintah spesifik (252 dan 123) ke semua robot sebagai sinyal stop
+# - Masuk ke loop standby dengan perintah `data = [i, 1, 1]` hingga flag `stop` dimatikan dari luar
 import modules.varGlobals as varGlobals
 import time
 import modules.dataRobot as dataRobot
 from modules.comBasestation import send_robot
 
-
+##
+# @brief Menghentikan semua mode permainan dan mengatur robot ke mode standby.
+#
+# Fungsi ini akan:
+# - Menonaktifkan seluruh flag strategi yang sedang berjalan
+# - Mengatur robot agar berhenti bergerak
+# - Mengirim sinyal stop ke semua robot sebanyak dua kali
+# - Memasukkan robot ke dalam loop standby hingga `varGlobals.stop == False`
+#
+# @warning Fungsi ini akan terus mengirim perintah standby sampai dihentikan secara eksplisit.
 def stop():
     varGlobals.runKickoffTeam = False
     varGlobals.runKickoffMusuh = False

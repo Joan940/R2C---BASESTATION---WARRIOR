@@ -1,3 +1,15 @@
+##
+# @file comBasestation.py
+# @brief Modul komunikasi antara simulasi dan robot menggunakan protokol UDP multicast.
+#
+# Modul ini berfungsi untuk:
+# - Menerima data dari robot melalui UDP multicast
+# - Mengirim perintah ke robot
+# - Memproses data dari robot dan menyimpannya ke struktur data global
+#
+# Komunikasi ini penting untuk menyinkronkan status robot dalam simulasi dengan data sebenarnya.
+#
+
 import time
 import socket
 import struct
@@ -11,6 +23,15 @@ buffer_data = deque(maxlen=50)
 prestart = False
 rec_thread = None
 
+##
+# @brief Memulai thread penerimaan data dari robot melalui UDP multicast.
+#
+# Fungsi ini membuat dan menjalankan thread `rec_UDP()` secara daemon jika belum aktif.
+# Thread ini akan menerima data UDP dari robot secara asynchronous.
+#
+# @note Hanya satu thread akan dijalankan untuk mencegah duplikasi.
+# @return Tidak ada.
+
 def startBs():
     global prestart, rec_thread
     if not prestart or (rec_thread is not None and not rec_thread.is_alive()):
@@ -22,6 +43,20 @@ def startBs():
 #############################################################################################
 #                        MENERIMA DATA UDP MULTICAST DARI ROBOT                             #
 #############################################################################################
+##
+# @brief Menerima data UDP multicast dari robot dan menyimpannya ke dalam buffer.
+#
+# Fungsi ini:
+# - Membuka socket UDP multicast
+# - Bergabung ke grup multicast berdasarkan alamat dan port dari `varGlobals`
+# - Menerima paket data 18-byte dari robot
+# - Memasukkan data yang valid ke `buffer_data` untuk diproses selanjutnya
+#
+# @exception BlockingIOError Ditangani saat socket tidak memiliki data (non-blocking).
+# @exception socket.error Ditangani jika ada kesalahan pada socket.
+# @exception Exception Ditangani untuk semua error lainnya.
+# @return Tidak ada.
+
 def rec_UDP():
     recUDP = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     recUDP.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -53,6 +88,18 @@ def rec_UDP():
 #############################################################################################
 #                        MEMPROSES DATA DARI BUFFER                                         #
 #############################################################################################
+##
+# @brief Memproses data yang diterima dari buffer dan menyimpannya ke struktur global.
+#
+# Fungsi ini dijalankan dalam thread daemon dan akan terus:
+# - Mengambil data dari buffer (`buffer_data`)
+# - Menentukan jenis robot (0 = Kiper, 1 = Back, 2 = Striker)
+# - Memanggil fungsi `robotKiper()`, `robotBack()`, atau `robotStriker()` berdasarkan data
+# - Menentukan status koneksi masing-masing robot berdasarkan byte ke-17 (data[16])
+#
+# @note Fungsi ini berjalan terus-menerus selama program aktif.
+# @return Tidak ada.
+
 def process_buffer():
     while True:
         if buffer_data:
@@ -90,6 +137,17 @@ def process_buffer():
 #############################################################################################
 #                         MENGIRIM DATA UDP MULTICAST KE ROBOT                              #
 #############################################################################################
+##
+# @brief Mengirim data UDP multicast ke robot.
+#
+# Fungsi ini digunakan untuk mengirim perintah atau instruksi dalam bentuk `bytearray`
+# ke alamat multicast yang telah dikonfigurasi di `varGlobals.ADDRESS` dan `PORT_ADD`.
+#
+# @param data Array of bytes (bytearray) berisi perintah yang akan dikirim ke robot.
+#
+# @exception Exception Ditangkap untuk menghindari crash jika pengiriman gagal.
+# @return Tidak ada.
+
 def send_robot(data):
     sendrobot = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sendrobot.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
@@ -101,6 +159,11 @@ def send_robot(data):
     finally:
         sendrobot.close()
 
-# Jalankan thread untuk memproses buffer
+##
+# @brief Thread daemon yang menjalankan fungsi `process_buffer()`.
+#
+# Thread ini otomatis dimulai saat modul dijalankan dan terus aktif di latar belakang.
+# Ini memungkinkan pemrosesan data robot secara asynchronous tanpa mengganggu thread utama.
+
 process_thread = threading.Thread(target=process_buffer, daemon=True)
 process_thread.start()

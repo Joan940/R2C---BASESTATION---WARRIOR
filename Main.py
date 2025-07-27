@@ -1,3 +1,18 @@
+##
+# @file Main.py
+# @brief Program utama untuk simulasi dan pengaturan robot sepak bola menggunakan antarmuka GUI berbasis pygame.
+#
+# Program ini mencakup:
+# - Tampilan menu utama, konfigurasi, dan simulasi
+# - Interaksi tombol dan input teks
+# - Penggambaran robot, bola, dummy, musuh
+# - Integrasi dengan berbagai modul strategi, komunikasi, dan grafis
+# - Sistem decision tree untuk memilih aksi robot
+#
+# Modul yang digunakan: pygame, varGlobals, dataRobot, font, simRobot, comBasestation, skillBaru, algorithm, dan lainnya.
+#
+# @see modules/ untuk struktur modular lengkap.
+
 import sys
 import math
 import time
@@ -102,6 +117,16 @@ varGlobals.magenta=False
 #############################################################################################
 #                               LOGIKA UNTUK TOMBOL MENU                                    #
 #############################################################################################
+
+##
+# @brief Menangani aksi yang dilakukan saat tombol ditekan pada menu.
+#
+# Fungsi ini akan menjalankan aksi berbeda berdasarkan teks tombol seperti:
+# "start", "exit", "robot configuration", "connect", "grid back", dsb.
+# Terkoneksi langsung dengan menu utama dan simulator.
+#
+# @param text String yang berisi label tombol (dikonversi ke huruf kecil).
+# @return Tidak ada (None). Fungsi ini memanggil fungsi lain berdasarkan kondisi.
 
 def button_action(text):
     
@@ -342,6 +367,13 @@ def button_action(text):
 #############################################################################################
 #                                    MENGGAMBAR DUMMY                                       #
 #############################################################################################
+##
+# @brief Mengatur perpindahan posisi dummy 1 secara berurutan.
+#
+# Fungsi ini mengirimkan data posisi ke robot dan menyimpan indeks posisi dummy
+# untuk digunakan dalam pergerakan simulasi.
+#
+# @return Tuple posisi kembalian dalam koordinat layar (float, float).
 
 def pindah_posisi_dummy1():
     posisi_A = [(4, 16), (4, 18), (4, 20), (13, 16), (13, 18), (13, 20)]
@@ -408,6 +440,15 @@ def pindah_posisi_dummy3():
 #############################################################################################
 #                            LOGIKA UNTUK INPUT TEXT PADA MENU                              #
 #############################################################################################
+##
+# @brief Menangani input teks untuk konfigurasi posisi X robot Back dalam grid.
+#
+# Fungsi ini membaca input keyboard dari pengguna dan memperbarui nilai `CONFIG_BACK_GRID_X`
+# pada modul `varGlobals`. Tampilan input di-update secara realtime menggunakan pygame.
+#
+# @param inp Nilai awal dari input (biasanya `CONFIG_BACK_GRID_X`).
+# @param input_key Dictionary yang berisi koordinat objek input pada layar.
+# @return Tidak ada.
 
 def textActionBackGridX(inp, input_key):
     if inp == varGlobals.CONFIG_BACK_GRID_X:
@@ -441,6 +482,16 @@ def textActionBackGridX(inp, input_key):
         print('invalid entry')
     Simulator()
 
+##
+# @brief Menangani input teks untuk konfigurasi posisi Y robot Back dalam grid.
+#
+# Fungsi ini membaca input keyboard dari pengguna dan memperbarui nilai `CONFIG_BACK_GRID_Y`
+# pada modul `varGlobals`. Tampilan input di-update secara realtime menggunakan pygame.
+#
+# @param inp Nilai awal dari input (biasanya `CONFIG_BACK_GRID_Y`).
+# @param input_key Dictionary yang berisi koordinat objek input pada layar.
+# @return Tidak ada.
+
 def textActionBackGridY(inp, input_key):
     if inp == varGlobals.CONFIG_BACK_GRID_Y:
         print("BackGridY")
@@ -471,6 +522,16 @@ def textActionBackGridY(inp, input_key):
     else:
         print('invalid entry')
     Simulator()
+
+##
+# @brief Menangani input teks untuk konfigurasi posisi X robot Striker dalam grid.
+#
+# Fungsi ini membaca input keyboard dari pengguna dan memperbarui nilai `CONFIG_STRIKER_GRID_X`
+# pada modul `varGlobals`. Tampilan input di-update secara realtime menggunakan pygame.
+#
+# @param inp Nilai awal dari input (biasanya `CONFIG_STRIKER_GRID_X`).
+# @param input_key Dictionary yang berisi koordinat objek input pada layar.
+# @return Tidak ada.
 
 def textActionStrikerGridX(inp, input_key):
     if inp == varGlobals.CONFIG_STRIKER_GRID_X:
@@ -504,6 +565,16 @@ def textActionStrikerGridX(inp, input_key):
         print('invalid entry')
     Simulator()
 
+##
+# @brief Menangani input teks untuk konfigurasi posisi Y robot Striker dalam grid.
+#
+# Fungsi ini membaca input keyboard dari pengguna dan memperbarui nilai `CONFIG_STRIKER_GRID_Y`
+# pada modul `varGlobals`. Tampilan input di-update secara realtime menggunakan pygame.
+#
+# @param inp Nilai awal dari input (biasanya `CONFIG_STRIKER_GRID_Y`).
+# @param input_key Dictionary yang berisi koordinat objek input pada layar.
+# @return Tidak ada.
+
 def textActionStrikerGridY(inp, input_key):
     if inp == varGlobals.CONFIG_STRIKER_GRID_Y:
         print("StrikerGridY")
@@ -534,6 +605,18 @@ def textActionStrikerGridY(inp, input_key):
     else:
         print('invalid entry')
     Simulator()
+
+##
+# @brief Menangani input teks dari pengguna untuk konfigurasi IP dan port (Refbox & Basestation).
+#
+# Fungsi ini digunakan untuk mengubah nilai `IP`, `PORT_IP`, `ADDRESS`, dan `PORT_ADD`
+# berdasarkan input keyboard. Tampilan diperbarui secara langsung menggunakan pygame.
+#
+# @param inp Nilai awal dari input (string, salah satu dari: `IP`, `PORT_IP`, `ADDRESS`, `PORT_ADD`)
+# @param input_key Dictionary yang berisi objek-objek input untuk ditampilkan dan diedit.
+# @return Tidak ada.
+#
+# @note Fungsi ini digunakan dalam menu utama untuk konfigurasi awal komunikasi jaringan.
 
 def text_action(inp,input_key):
     #LOGIKA INPUT TEXT
@@ -653,6 +736,14 @@ def text_action(inp,input_key):
 #############################################################################################
 #                              LOOPING DAN TAMPILAN UTAMA MENU                              #
 #############################################################################################
+##
+# @brief Menampilkan tampilan menu utama pada layar.
+#
+# Fungsi ini mengatur semua komponen GUI di menu:
+# tombol "START", "EXIT", "CONNECT", "BIND", input IP/port, dan status koneksi robot.
+# Fungsi ini juga menangani klik tombol dan input teks untuk konfigurasi awal.
+#
+# @return Tidak ada (None).
 
 def mainMenu():
     varGlobals.runConf=False
@@ -984,6 +1075,18 @@ def robotConfiguration():
 #############################################################################################
 #                              LOOPING DAN TAMPILAN SIMULATOR                               #
 #############################################################################################
+##
+# @brief Menampilkan antarmuka utama simulasi robot.
+#
+# Menjalankan loop simulasi termasuk:
+# - Menggambar posisi robot, bola, musuh, dummy
+# - Menampilkan strategi dari decision tree
+# - Menampilkan status real-time robot
+# - Menangani input pengguna, klik, dan tombol mode
+#
+# @return Tidak ada (None)
+#
+# @note Fungsi ini memanggil `playGame()`, `draw_rotated_image()`, `calculate_position()`, dan fungsi strategi lainnya.
 
 def Simulator():
     global posisi_dummy1, posisi_dummy2, posisi_dummy3

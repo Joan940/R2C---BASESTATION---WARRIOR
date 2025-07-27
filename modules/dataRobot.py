@@ -1,3 +1,47 @@
+##
+# @file dataRobot.py
+# @brief Modul untuk menyimpan dan memperbarui data status robot sepak bola (Kiper, Back, Striker).
+#
+# Modul ini menerima data dalam bentuk array 18-byte dari masing-masing robot,
+# lalu menyimpannya dalam variabel global untuk digunakan oleh simulasi, strategi, dan visualisasi.
+#
+# Fungsi utama:
+# - `robotKiper(data, address)`
+# - `robotBack(data, address)`
+# - `robotStriker(data, address)`
+#
+# Setiap fungsi akan mem-parsing data yang dikirim robot dan menyimpannya ke dalam
+# struktur data global berdasarkan ID robot.
+#
+
+##
+# @var robot_id
+# @brief ID untuk masing-masing robot [Kiper, Back, Striker].
+
+# @var kompas_value
+# @brief Nilai sudut kompas dari masing-masing robot.
+
+# @var xpos, ypos
+# @brief Posisi X dan Y masing-masing robot dalam koordinat lapangan.
+
+# @var ball_value
+# @brief Sudut arah bola relatif terhadap robot.
+
+# @var ball_distance
+# @brief Jarak bola dari masing-masing robot (khusus Kiper).
+
+# @var enemy1, enemy2, enemy3
+# @brief Sudut arah musuh terhadap masing-masing robot.
+
+# @var catch_ball
+# @brief Status kepemilikan bola (1 jika memegang bola, 0 jika tidak).
+
+# @var connect
+# @brief Status koneksi antara simulator dan robot (1 jika terhubung).
+
+# @var status_robot
+# @brief Status tambahan untuk masing-masing robot (diisi oleh Back dan Striker).
+
 kiper_robot_ip = '0'
 back_robot_ip = '0'
 striker_robot_ip = '0'
@@ -20,6 +64,20 @@ connect = [0,1,2]
 #  BACK_ID    = 1  #
 #  STRIKER_ID = 2  #
 ####################
+
+##
+# @brief Memproses data dari robot kiper dan menyimpannya ke dalam variabel global.
+#
+# Fungsi ini mengambil data 18-byte dari kiper dan mengekstrak informasi seperti:
+# - ID robot
+# - Kompas (sudut orientasi)
+# - Posisi (X, Y)
+# - Arah dan jarak bola
+# - Arah musuh (enemy2 dan enemy3)
+# - Status kepemilikan bola dan koneksi
+#
+# @param data Array 18-byte (list of int) berisi data sensor dan status robot.
+# @param address Tuple alamat IP dan port sumber data.
 
 def robotKiper(data, address):
     global kiper_robot_ip
@@ -60,6 +118,16 @@ def robotKiper(data, address):
     catch_ball[0] = data[15]
     connect[0] = data[16]
 
+##
+# @brief Memproses data dari robot back dan menyimpannya ke dalam variabel global.
+#
+# Ekstraksi data mirip seperti kiper, tetapi menambahkan informasi:
+# - Sudut enemy1
+# - status_robot[1] untuk status tambahan dari robot back.
+#
+# @param data Array 18-byte dari robot back.
+# @param address Tuple alamat IP dan port pengirim.
+
 def robotBack(data, address):
     global back_robot_ip
 
@@ -98,6 +166,19 @@ def robotBack(data, address):
     connect[1] = data[16]
 
     status_robot[1] = data[17]
+
+##
+# @brief Memproses data dari robot striker dan menyimpannya ke dalam variabel global.
+#
+# Memperbarui:
+# - Posisi
+# - Sudut orientasi
+# - Arah bola dan arah musuh
+# - Status pemegang bola dan koneksi
+# - status_robot[2] untuk status khusus striker
+#
+# @param data Array 18-byte dari robot striker.
+# @param address Tuple alamat IP dan port pengirim.
 
 def robotStriker(data, address):
     global striker_robot_ip

@@ -1,3 +1,14 @@
+##
+# @file varGlobals.py
+# @brief Modul variabel global dan konfigurasi untuk simulasi robot sepak bola.
+#
+# Modul ini menginisialisasi jendela Pygame, memuat aset grafis, dan mendefinisikan variabel global
+# seperti koordinat bola, status robot, mode permainan, serta input keyboard.
+#
+# Semua file lain mengakses variabel dari modul ini untuk menjaga konsistensi dan koordinasi
+# antar fungsi dalam sistem simulasi dan strategi.
+#
+
 import pygame
 import os,sys
 from pygame.locals import KEYDOWN, KEYUP, K_q,K_e,K_z,K_c, K_w, K_a, K_s, K_d, K_UP, K_DOWN, K_LEFT, K_RIGHT,K_k,K_l,K_1,K_2

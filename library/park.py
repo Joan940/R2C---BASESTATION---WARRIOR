@@ -1,7 +1,34 @@
+##
+# @file park.py
+# @brief Modul untuk mengatur mode parkir robot setelah pertandingan atau saat transisi.
+#
+# Fungsi `park()` bertugas menonaktifkan semua strategi permainan
+# dan menjaga robot dalam status diam sambil menunggu posisi robot sesuai syarat tertentu.
+#
+# Mode ini umum digunakan saat pertandingan selesai, time-out, atau saat fase transisi
+# menuju kondisi idle dengan memantau posisi tertentu.
+#
+# @details
+# Fungsi ini menonaktifkan semua flag strategi (kickoff, penalty, throw-in, dll),
+# dan mengaktifkan flag `varGlobals.park = True` untuk masuk ke mode "park".
+#
+# Mode ini akan terus berjalan hingga `varGlobals.park == False` atau program dihentikan.
 import modules.varGlobals as varGlobals
 import time
 import modules.dataRobot as dataRobot
 
+##
+# @brief Menjalankan mode parkir robot untuk memastikan posisi akhir sesuai.
+#
+# Fungsi ini akan:
+# - Mematikan seluruh strategi permainan
+# - Menyalakan mode `park`
+# - Mengirim sinyal prestart 5x sekali saja
+# - Mengecek posisi robot 2 hingga berada di x == 400
+# - Looping dengan delay 0.5 detik selama mode `park` masih aktif
+#
+# @note
+# Digunakan di akhir pertandingan atau saat robot harus diam terkontrol.
 def park():
     varGlobals.runKickoffTeam = False
     varGlobals.runKickoffMusuh = False

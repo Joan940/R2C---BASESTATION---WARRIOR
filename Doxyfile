@@ -1,0 +1,38 @@
+#----------------------------------------
+# Konfigurasi utama
+#----------------------------------------
+
+PROJECT_NAME           = "Robot Soccer System"
+PROJECT_BRIEF          = "Dokumentasi sistem robot sepak bola berbasis Python"
+OUTPUT_DIRECTORY       = docs
+INPUT                  = Main.py modules/ library/
+RECURSIVE              = YES
+FILE_PATTERNS          = *.py *.json *.dox
+EXTENSION_MAPPING      = py=Python
+
+#----------------------------------------
+# Output
+#----------------------------------------
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+GENERATE_TREEVIEW      = YES
+
+#----------------------------------------
+# Ekstraksi isi file
+#----------------------------------------
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+
+#----------------------------------------
+# Path dan filter
+#----------------------------------------
+
+STRIP_FROM_PATH        = .
+QUIET                  = NO
+WARNINGS               = YES

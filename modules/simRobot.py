@@ -1,6 +1,26 @@
+##
+# @file simRobot.py
+# @brief Modul simulasi pengiriman data ke robot (Kiper, Back, Striker) melalui UDP multicast.
+#
+# File ini menyediakan fungsi untuk membentuk dan mengirim paket data ke masing-masing robot
+# berdasarkan ID dan perintah tertentu. Modul ini digunakan dalam lingkungan simulasi sepak bola robot.
+#
+# Format data dikirim dalam bentuk `bytearray(18)` dan mencakup informasi posisi, arah, status bola, dll.
+#
+
 from time import sleep
 import modules.varGlobals as varGlobals
 import socket
+
+##
+# @var robot_id
+# @brief ID unik masing-masing robot (0 = Kiper, 1 = Back, 2 = Striker).
+#
+# Digunakan sebagai identifikasi pada byte pertama dalam paket data.
+
+# Variabel-variabel lain seperti:
+# kompas_value, xpos, ypos, ball_value, enemy1, enemy2, enemy3, catch_ball, connect
+# bersifat placeholder/list default dan bisa digunakan sebagai penyimpanan sementara status robot.
 
 robot_id = [0,1,2]
 kompas_value = [0,1,2]
@@ -12,6 +32,21 @@ enemy2 = [0,1,2]
 enemy3 = [0,1,2]
 catch_ball = [0,1,2]
 connect = [0,1,2]
+
+##
+# @brief Mengirim data simulasi ke robot kiper.
+#
+# Fungsi ini memproses array `data` dan mengubahnya menjadi format `bytearray(18)`
+# yang sesuai dengan protokol komunikasi robot kiper, kemudian mengirimkannya melalui UDP multicast.
+#
+# @param data Array dari nilai integer yang mencakup instruksi dan data posisi, arah, dan status robot.
+#
+# @note
+# - data[1] == 255: mengirim perintah penuh (dengan arah dan posisi)
+# - data[1] == 251: hanya mengirim posisi target (tanpa arah atau kontrol lain)
+# - Byte ke-16 (index 15) digunakan untuk status, byte ke-17 (index 16) untuk status aktif
+#
+# @return Tidak ada.
 
 def kiper(data):
     send=bytearray(18)
@@ -49,7 +84,19 @@ def kiper(data):
         sleep(0.15)
         send_robot(send)
     print("kiper")
-    
+
+##
+# @brief Mengirim data simulasi ke robot Back.
+#
+# Memproses array `data` menjadi `bytearray(18)` dan mengirimkannya ke robot Back.
+# Mendukung 3 jenis perintah:
+# - data[1] == 255: perintah kontrol penuh (arah, posisi, status)
+# - data[1] == 254: perintah skill khusus (menghidupkan/mematikan flag tertentu)
+# - data[1] == 251: perintah posisi target saja
+#
+# @param data Array integer yang mencakup kode perintah dan data status.
+# @return Tidak ada.
+
 def back(data):
     send=bytearray(18)
     if data[1]==255:
@@ -108,7 +155,22 @@ def back(data):
         sleep(0.15)
         send_robot(send)
     print("back")
-    
+
+##
+# @brief Mengirim data simulasi ke robot Striker.
+#
+# Menerjemahkan data masukan ke format bytearray(18) dan mengirim melalui UDP.
+# Mendukung perintah untuk kontrol penuh, aksi skill (mengatur bit tertentu), dan posisi target.
+#
+# @param data Array integer, sama seperti pada fungsi `kiper()` dan `back()`.
+#
+# @note
+# - data[1] == 255: kontrol penuh
+# - data[1] == 254: mengatur flag skill (bit ke-15)
+# - data[1] == 251: hanya posisi
+#
+# @return Tidak ada.
+
 def striker(data):
     send=bytearray(18)
     if data[1]==255:
@@ -164,6 +226,17 @@ def striker(data):
         sleep(0.15)
         send_robot(send)
     print("striker")
+
+##
+# @brief Mengirim bytearray data ke robot melalui socket UDP multicast.
+#
+# Fungsi ini membuat socket UDP dengan TTL = 3 dan mengirim data ke alamat dan port yang didefinisikan
+# dalam modul `varGlobals`.
+#
+# @param data Bytearray berisi 18 byte yang akan dikirim ke robot.
+#
+# @note Socket akan ditutup jika varGlobals.udp bernilai False.
+# @return Tidak ada.
 
 def send_robot(data):
     sendrobot=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

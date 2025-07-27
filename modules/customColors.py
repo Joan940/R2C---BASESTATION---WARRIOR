@@ -1,4 +1,22 @@
+##
+# @file customColors.py
+# @brief Modul definisi warna dan utilitas teks untuk simulasi robot sepak bola.
+#
+# Modul ini mendefinisikan berbagai warna RGB yang digunakan dalam antarmuka grafis Pygame,
+# terutama untuk pewarnaan elemen-elemen visual seperti robot, garis, dan tampilan informasi.
+#
+# Selain itu, terdapat fungsi `text_to_screen()` untuk menampilkan teks ke layar dengan
+# penyesuaian font, warna, dan posisi.
+#
+
 from pygame.font import SysFont
+
+##
+# @class customColors
+# @brief Kelas berisi definisi warna-warna RGB kustom untuk GUI simulator.
+#
+# Kelas ini berisi konstan warna dalam format RGB dan dictionary warna bernomor
+# untuk keperluan pewarnaan elemen visual.
 
 class customColors:
     BLACK = (0, 0, 0)
@@ -41,6 +59,9 @@ class customColors:
 
     COLORKEY = (255, 0, 255)  # RGB MAGENTA COLOR FOR COLORKEYING
 
+    ##
+    # @var colorlist
+    # @brief Dictionary pemetaan angka ke warna untuk elemen teks/visual.
     colorlist = {  # Colors for numbers in order
         1: WHITE,
         2: PURPLE,
@@ -54,6 +75,20 @@ class customColors:
         10: FTEK2,
     }
 
+##
+# @brief Menampilkan teks ke layar dengan posisi dan warna yang disesuaikan.
+#
+# Fungsi ini akan merender teks pada layar menggunakan font Consolas secara default,
+# dengan ukuran dan warna tertentu, serta terpusat pada koordinat (x, y).
+#
+# @param screen Surface layar tujuan.
+# @param text Teks atau angka yang akan ditampilkan.
+# @param x Posisi X dari pusat teks.
+# @param y Posisi Y dari pusat teks.
+# @param size Ukuran font (default: 10).
+# @param color Warna teks (default: berdasarkan angka di colorlist).
+# @param font_type Font alternatif (default: Consolas).
+# @return Rect objek area yang digunakan oleh teks.
 
 def text_to_screen(screen, text, x, y, size=10, color=None, font_type=None):
     #pygame.display.update()

@@ -1,3 +1,24 @@
+##
+# @file skillBaru.py
+# @brief Modul kontrol aksi robot sepak bola: pergerakan, tendangan, giring, prediksi, dan grid.
+#
+# File ini berisi kumpulan fungsi untuk mengendalikan robot sepak bola
+# seperti kejar bola, tendang, passing, dribble, serta manajemen grid posisi.
+# Juga mencakup fungsi bantu seperti Bezier Curve untuk pergerakan dinamis.
+#
+# Digunakan oleh sistem simulasi dan real-time controller berbasis Python.
+#
+# @author Joan
+# @date 2025-07-27
+#
+# @details
+# Modul ini berinteraksi dengan modul lain:
+# - modules.comBasestation: untuk mengirim data ke robot.
+# - modules.varGlobals: menyimpan konfigurasi grid dan resolusi.
+# - modules.dataRobot: menyimpan status posisi dan status robot.
+#
+# Format data yang dikirim ke robot adalah bytearray 3–6 byte tergantung aksi.
+# Setiap perintah diberi kode tertentu sesuai dengan protokol komunikasi.
 from modules.comBasestation import send_robot
 from modules.coreMain import drawCenterHeading
 import modules.varGlobals as varGlobals
@@ -8,6 +29,11 @@ import time
 #         Fungsi Pembantu       #
 #################################
 
+## Membuat paket data standar (3 byte) untuk dikirim ke robot.
+# @param id ID robot (0–2)
+# @param kecepatan Nilai kecepatan (0–255)
+# @param perintah Kode aksi (1–11)
+# @return bytearray dengan 3 elemen
 def setData(id, kecepatan, perintah):
     data = bytearray(3)
     data[0] = int(id)
@@ -15,6 +41,8 @@ def setData(id, kecepatan, perintah):
     data[2] = int(perintah)
     return data
 
+## Mengirim data ke robot dengan penanganan error.
+# @param data Bytearray yang akan dikirim
 def kirimData(data):
     try:
         send_robot(data)
@@ -22,6 +50,12 @@ def kirimData(data):
     except Exception as e:
         print(f"Error mengirim data ke robot: {e}")
 
+## Mengatur posisi robot berdasarkan koordinat dan sudut orientasi.
+# @param id ID robot (0–2)
+# @param x Koordinat X (pixel)
+# @param y Koordinat Y (pixel)
+# @param angle Sudut orientasi (0–360 derajat)
+# @return Nilai gridX setelah diubah
 def ubahPosisi(id, x, y, angle):
     data = bytearray(6)
     data[0] = int(id)
@@ -90,30 +124,6 @@ def kejarBolaCepat(id):
         lihatBolaDiam(1)
 
 #################################
-#          Uji Coba Giring      #
-#################################
-
-def dribbling(id):
-    data=bytearray(3)
-    print("Dribling")
-    data[0]=int(id)
-    data[1]=int(254)
-    data[2]=7
-    if dataRobot.catch_ball[id]==1:
-        if id==1:
-            lihatBolaDiam(2)
-            ubahPosisi(2,(dataRobot.xpos[1]//50)+1,(dataRobot.ypos[1]//50)+1, 0)
-            # time.sleep(3)
-        elif id==2:
-            lihatBolaDiam(1)
-            ubahPosisi(2,(dataRobot.xpos[2]//50)+1,(dataRobot.ypos[2]//50)+1, 0)
-            # time.sleep(3)
-        passing(id)
-    else:
-        kirimData(data)
-    # time.sleep(0.5)
-
-#################################
 #          Fungsi Kiper         #
 #################################
 
@@ -171,9 +181,9 @@ def sendGrid():
         kirimData(data)
 
 
-##################################
-#        Fungsi Percobaan        #
-##################################
+###########################################################
+#        Fungsi Percobaan Masih Dalam Pengembangan        #
+###########################################################
 
 def bezier(t, points):
     n = len(points) - 1  
@@ -247,4 +257,19 @@ def bezierCurve(id, robo1_x, robo1_y, robo2_x, robo2_y, gridRes):
     kirimData(data)  
     return position
 
-    
+def dribbling(id):
+    data=bytearray(3)
+    print("Dribling")
+    data[0]=int(id)
+    data[1]=int(254)
+    data[2]=7
+    if dataRobot.catch_ball[id]==1:
+        if id==1:
+            lihatBolaDiam(2)
+            ubahPosisi(2,(dataRobot.xpos[1]//50)+1,(dataRobot.ypos[1]//50)+1, 0)
+        elif id==2:
+            lihatBolaDiam(1)
+            ubahPosisi(2,(dataRobot.xpos[2]//50)+1,(dataRobot.ypos[2]//50)+1, 0)
+        passing(id)
+    else:
+        kirimData(data)

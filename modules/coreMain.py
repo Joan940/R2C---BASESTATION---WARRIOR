@@ -1,3 +1,14 @@
+##
+# @file coreMain.py
+# @brief Modul utama visualisasi simulasi sepak bola robot menggunakan pygame.
+#
+# Menyediakan fungsi untuk menggambar berbagai elemen seperti robot, bola, musuh, heading,
+# dummy, dan grid. Juga terdapat fungsi perhitungan geometri untuk heading, posisi bola,
+# dan jarak antar objek.
+#
+# Modul ini digunakan untuk memvisualisasikan data robot secara real-time dalam tampilan lapangan.
+#
+
 import modules.varGlobals as varGlobals
 import pygame
 import math
@@ -8,6 +19,15 @@ from modules.customColors import customColors as cc, text_to_screen as tts
 #############################################################################################
 #                           UNTUK MENAMPILKAN ROBOT DI LAPANGAN                             #
 #############################################################################################
+##
+# @brief Menggambar gambar robot yang telah diputar berdasarkan arah (sudut).
+#
+# Fungsi ini memutar citra robot, menggambar arah (heading), dan menampilkannya di layar pygame.
+#
+# @param image Gambar robot.
+# @param x Posisi X pada layar.
+# @param y Posisi Y pada layar.
+# @param angle Sudut rotasi robot dalam derajat (0–360).
 
 def draw_rotated_image(image, x, y, angle):
     
@@ -20,6 +40,17 @@ def draw_rotated_image(image, x, y, angle):
         
         #drawBallHeading(x,y,(angle-45))
     varGlobals.screen.blit(rotated_image, new_rect)
+
+##
+# @brief Menggambar garis heading arah hadap robot berdasarkan sudut.
+#
+# Garis heading ini membantu memperlihatkan orientasi robot di lapangan.
+#
+# @param x Koordinat X robot.
+# @param y Koordinat Y robot.
+# @param angle Sudut arah hadap robot (dalam derajat).
+#
+# @return pygame.Rect Batas area garis heading.
 
 def drawHeading(x,y,angle):
     if 360-angle >= 0 and 360-angle <= 90:
@@ -66,16 +97,15 @@ def drawHeading(x,y,angle):
     pygame.draw.line(varGlobals.screen, cc.RED, (x, y), (end_x, end_y), 2)
     return pygame.Rect(min(x, end_x), min(y, end_y), abs(x - end_x), abs(y - end_y))
 
-def drawCenterHeading(x, y, target_x, target_y):  
-    line_length = 100
-
-    angle_rad = math.atan2(target_y - y, target_x - x) 
-    angle_deg = math.degrees(angle_rad)
-    end_x = x + line_length * math.cos(angle_rad)  
-    end_y = y - line_length * math.sin(angle_rad)  
-
-    pygame.draw.line(varGlobals.screen, cc.NAVY_BLUE, (x, y), (end_x, end_y), 2)
-    return angle_deg 
+##
+# @brief Menggambar heading dari robot ke titik target.
+#
+# @param x Koordinat X robot.
+# @param y Koordinat Y robot.
+# @param target_x Koordinat X target.
+# @param target_y Koordinat Y target.
+#
+# @return float Sudut antara robot dan target (dalam derajat).
 
 def drawCenterHeading(x,y):
     line_length=100
@@ -86,6 +116,13 @@ def drawCenterHeading(x,y):
 
     pygame.draw.line(varGlobals.screen, cc.NAVY_BLUE, (x, y), (end_x, end_y), 2)
 
+##
+# @brief Menggambar heading bola dari posisi robot berdasarkan sudut tertentu.
+#
+# @param x Koordinat X robot.
+# @param y Koordinat Y robot.
+# @param theta Sudut arah bola dalam derajat.
+
 def drawBallHeading(x,y,theta):
     line_length= 1200
 
@@ -94,6 +131,17 @@ def drawBallHeading(x,y,theta):
     end_y = y - line_length * math.sin(angle_rad)
 
     pygame.draw.line(varGlobals.screen, cc.PURPLE, (x, y), (end_x, end_y), 2)
+
+##
+# @brief Menghitung sudut relatif bola terhadap arah robot.
+#
+# @param robot_x Posisi X robot.
+# @param robot_y Posisi Y robot.
+# @param robot_angle Sudut arah robot.
+# @param ball_x Posisi X bola.
+# @param ball_y Posisi Y bola.
+#
+# @return float Sudut relatif bola terhadap robot (0–360).
 
 def calculate_ball_angle(robot_x, robot_y, robot_angle, ball_x, ball_y):
     # Menghitung delta X dan delta Y antara robot dan bola
@@ -111,6 +159,16 @@ def calculate_ball_angle(robot_x, robot_y, robot_angle, ball_x, ball_y):
 
     return relative_angle
 
+##
+# @brief Menghitung koordinat bola berdasarkan jarak dari robot.
+#
+# @param robot_x Posisi X robot.
+# @param robot_y Posisi Y robot.
+# @param robot_angle Sudut arah robot.
+# @param ball_distance Jarak bola dari robot.
+#
+# @return (x, y) Posisi bola.
+
 def calculate_position_ball_single_robot(robot_x, robot_y, robot_angle, ball_distance):
     # Menghitung posisi bola berdasarkan jarak dari robot
     angle_rad = math.radians(robot_angle)
@@ -120,6 +178,16 @@ def calculate_position_ball_single_robot(robot_x, robot_y, robot_angle, ball_dis
     ball_y = robot_y + ball_distance * math.sin(angle_rad)
 
     return round(ball_x), round(ball_y)
+
+##
+# @brief Menghitung titik potong garis heading dari dua robot.
+#
+# @param robot_x1, robot_y1 Posisi robot pertama.
+# @param robot_angle1 Sudut arah robot pertama.
+# @param robot_x2, robot_y2 Posisi robot kedua.
+# @param robot_angle2 Sudut arah robot kedua.
+#
+# @return (x, y) Titik potong garis heading, atau (-100, -100) jika sejajar.
 
 def calculate_position(robot_x1, robot_y1, robot_angle1, robot_x2, robot_y2, robot_angle2):
     # Mencari persamaan garis dari setiap robot
@@ -143,23 +211,26 @@ def calculate_position(robot_x1, robot_y1, robot_angle1, robot_x2, robot_y2, rob
 #                                   UNTUK MENAMPILKAN DUMMY                                 #
 #############################################################################################
 
-
-# def calculate_angle(x1, y1, xGoal, yGoal):
-#     dx = xGoal - x1
-#     dy = yGoal - y1
-
-#     angle_rad = math.atan2(dy, dx)
-#     angle_deg = math.degrees(angle_rad)
-
-#     angle_deg = angle_deg % 360
-
-#     return angle_deg
+##
+# @brief Menggambar dummy pada posisi tertentu di grid.
+#
+# @param x Koordinat grid X.
+# @param y Koordinat grid Y.
 
 def draw_dummy(x, y):
     width = 45
     height = 45
 
     pygame.draw.rect(varGlobals.screen, cc.BLACK, (x * 50, y * 50, width, height))
+
+##
+# @brief Menggeser dummy secara berurutan berdasarkan daftar posisi.
+#
+# @param x_options Daftar posisi X yang tersedia.
+# @param y_options Daftar posisi Y yang tersedia.
+# @param current_index Indeks sekarang untuk pemilihan posisi.
+#
+# @return (x, y) Posisi dummy saat ini.
 
 def move_dummy_sequentially(x_options, y_options, current_index):
     x = x_options[current_index % len(x_options)]
@@ -171,6 +242,11 @@ def move_dummy_sequentially(x_options, y_options, current_index):
 #                                 UNTUK MENAMPILKAN BOLA                                    #
 #############################################################################################
 
+##
+# @brief Menggambar bola pada posisi tertentu.
+#
+# @param x Posisi X bola.
+# @param y Posisi Y bola.
 
 def draw_setBall(x, y):
     if x == -100 and y == -100:
@@ -183,6 +259,14 @@ def draw_ball(x, y):
         return
     pygame.draw.circle(varGlobals.screen, cc.RED, ((x), (y)), 10)
 
+##
+# @brief Menggambar garis lintasan bola.
+#
+# @param x1 Titik awal X.
+# @param y1 Titik awal Y.
+# @param x2 Titik akhir X.
+# @param y2 Titik akhir Y.
+
 def draw_line_bola(x1, y1, x2, y2):
     pygame.draw.aaline(varGlobals.screen, cc.GRASS_GREEN, (x1, y1), (x2, y2))
 
@@ -190,7 +274,16 @@ def draw_line_bola(x1, y1, x2, y2):
 #############################################################################################
 #                                UNTUK MENAMPILKAN MUSUH                                    #
 #############################################################################################
-
+##
+# @brief Menggambar ikon robot musuh di lapangan.
+#
+# Konsepnya adalah ketika salah dua robot melihat robot musuh, akan didapatkan nilai/value berupa sudut.
+# Lalu sudut yang didapatkan akan diolah, ditarik garis lurus sehingga mendapatkan perpotongan garis.
+# Perpotongan garis tersebutlah yang akan menjadi prediksi di mana robot musuh berada.
+# Konsep ini sama dengan bagaimana cara dalam memprediksi posisi bola.
+#
+# @param x Posisi X musuh.
+# @param y Posisi Y musuh.
 
 def draw_musuh(x, y):
     if varGlobals.cyan:
@@ -205,6 +298,11 @@ def draw_line_musuh(x1, y1, x2, y2):
 
 def draw_line_teman(x1, y1, x2, y2):
     pygame.draw.line(varGlobals.screen, cc.WHITE, (x1, y1), (x2, y2), 2)
+
+##
+# @brief Menggambar grid lapangan beserta label sumbu X dan Y.
+#
+# Label numerik akan ditampilkan pada setiap baris dan kolom grid.
 
 def gambar_grid():
     for xGrid in range(int(varGlobals.offsetX-varGlobals.offsetResetPosX), 
@@ -242,7 +340,13 @@ def gambar_grid():
                 yGrid+((varGlobals.gridRes*varGlobals.skala)/2), 
                 size=int(varGlobals.res[0]/90), 
                 color=cc.AXOLOTL)
-            
+
+##
+# @brief Membaca file JSON dan mengembalikan isi sebagai dictionary.
+#
+# @param filename Nama file JSON.
+# @return Dict berisi data hasil parsing JSON.
+
 def read_json(filename):  
     with open(filename, 'r') as file:  
         data = json.load(file)  
@@ -252,9 +356,23 @@ def read_json(filename):
 #                   PERCOBAAN                  #
 ################################################
 
+##
+# @brief Menghitung jarak Euclidean antara dua titik.
+#
+# @param x1, y1 Titik 1.
+# @param x2, y2 Titik 2.
+# @return float Jarak Euclidean.
+
 def calculate_distance(x1, y1, x2, y2):
     # menggunakan rumus Euclidean
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+##
+# @brief Menentukan robot kita yang paling dekat dengan robot musuh.
+#
+# @param our_robots Dictionary berisi ID dan data posisi robot kita.
+# @param enemy_robot Tuple berisi posisi musuh (x, y).
+# @return (robot_id, distance) ID robot terdekat dan jaraknya.
 
 def find_nearest_robot(our_robots, enemy_robot):
     nearest_robot = None
@@ -269,12 +387,15 @@ def find_nearest_robot(our_robots, enemy_robot):
     
     return nearest_robot, min_distance
 
-def draw_our_robots(our_robots, nearest_robot_id):
-    for robot_id, (x, y, angle, image) in our_robots.items():
-        draw_rotated_image(image, x, y, angle)
-        
-        if robot_id == nearest_robot_id:
-            pygame.draw.circle(varGlobals.screen, cc.YELLOW, (x, y), 20, 2)
+##
+# @brief Menghitung titik lintasan pada kurva Bézier berdasarkan kontrol poin.
+#
+# Fungsi ini masih dalam tahap pengembangan dengan tujuan awalnya adalah untuk menghindari musuh/dummy
+# menggunakan pendekatan berzier curve
+#
+# @param t Parameter interpolasi (0–1).
+# @param points Daftar koordinat kontrol.
+# @return (x, y) Titik pada kurva Bézier.
 
 def bezier(t, points):
     n = len(points) - 1  
@@ -288,6 +409,13 @@ def bezier(t, points):
     )  
     return (x, y)  
 
+##
+# @brief Menghitung koefisien binomial (nCk).
+#
+# @param n Jumlah total.
+# @param k Jumlah yang dipilih.
+# @return int Nilai kombinasi nCk.
+
 def binomial(n, k):  
     if k < 0 or k > n:  
         return 0  
@@ -298,6 +426,14 @@ def binomial(n, k):
     for i in range(k):  
         c = c * (n - i) // (i + 1)  
     return c
+
+##
+# @brief Menggambar kurva Bézier di layar pygame.
+#
+# @param screen Objek layar pygame.
+# @param control_points Daftar titik kontrol.
+# @param iterasi Jumlah segmen (semakin besar semakin halus).
+# @param color Warna garis kurva.
 
 def draw_bezier_curve(screen, control_points, iterasi, color):
     for i in range(iterasi):  

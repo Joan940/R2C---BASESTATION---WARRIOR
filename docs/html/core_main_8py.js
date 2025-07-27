@@ -1,0 +1,25 @@
+var core_main_8py =
+[
+    [ "modules.coreMain.bezier", "namespacemodules_1_1core_main.html#a4c1698062336de0ef04619bd69e21a0a", null ],
+    [ "modules.coreMain.binomial", "namespacemodules_1_1core_main.html#adee7753a6366751f96c91bffdca4b390", null ],
+    [ "modules.coreMain.calculate_ball_angle", "namespacemodules_1_1core_main.html#af0cdec16860a7537861152396ca1edbb", null ],
+    [ "modules.coreMain.calculate_distance", "namespacemodules_1_1core_main.html#abce0e6aaa67f9a3b6882622b66962f4c", null ],
+    [ "modules.coreMain.calculate_position", "namespacemodules_1_1core_main.html#abcfd4a066967395c2b77888b906f6bca", null ],
+    [ "modules.coreMain.calculate_position_ball_single_robot", "namespacemodules_1_1core_main.html#af1f4e2836dad88b62e8ee6ec15f1df6b", null ],
+    [ "modules.coreMain.draw_ball", "namespacemodules_1_1core_main.html#a8d3fb9599daf778af068a155038fb6ae", null ],
+    [ "modules.coreMain.draw_bezier_curve", "namespacemodules_1_1core_main.html#a8feefa4561cfdcf99435a36392380c2f", null ],
+    [ "modules.coreMain.draw_dummy", "namespacemodules_1_1core_main.html#a5366645c8494e4f1feed5514ac6ffa59", null ],
+    [ "modules.coreMain.draw_line_bola", "namespacemodules_1_1core_main.html#a5f9d8c5af6a708301e52ec9f390d0bf6", null ],
+    [ "modules.coreMain.draw_line_musuh", "namespacemodules_1_1core_main.html#a508576386096392c717a34a2314ae776", null ],
+    [ "modules.coreMain.draw_line_teman", "namespacemodules_1_1core_main.html#ace7e8d15f8232c3f5af6d29cbc9bc76b", null ],
+    [ "modules.coreMain.draw_musuh", "namespacemodules_1_1core_main.html#acbbf6704bf87005ecb4485e4c643e1ae", null ],
+    [ "modules.coreMain.draw_rotated_image", "namespacemodules_1_1core_main.html#a89aad2ff39d5c9e478da4f0bf3cb51aa", null ],
+    [ "modules.coreMain.draw_setBall", "namespacemodules_1_1core_main.html#a7aee83866f9814c5967482c57968f1e6", null ],
+    [ "modules.coreMain.drawBallHeading", "namespacemodules_1_1core_main.html#a49543168a091cc91ee24a4f7539dcc33", null ],
+    [ "modules.coreMain.drawCenterHeading", "namespacemodules_1_1core_main.html#a761c87c471aaf82b6f3ae37192072260", null ],
+    [ "modules.coreMain.drawHeading", "namespacemodules_1_1core_main.html#a1123aae4dfc253ccb78166ce490b5912", null ],
+    [ "modules.coreMain.find_nearest_robot", "namespacemodules_1_1core_main.html#a31793b468b26abdd96282114e0d4bce4", null ],
+    [ "modules.coreMain.gambar_grid", "namespacemodules_1_1core_main.html#aa1f600c7ab6ba1841f666b116a3c67ae", null ],
+    [ "modules.coreMain.move_dummy_sequentially", "namespacemodules_1_1core_main.html#a9a35fa9306349c3688967adeafa0ee05", null ],
+    [ "modules.coreMain.read_json", "namespacemodules_1_1core_main.html#afa53c4e02e494971f12213a4d00c2479", null ]
+];
